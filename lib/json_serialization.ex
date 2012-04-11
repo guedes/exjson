@@ -15,41 +15,26 @@ end
 defimpl JSON, for: Tuple do
   def generate({}), do: "{}"
 
-  def generate({ key, value }) when is_list(value) do
-    JSON.List.container_join(tuple_to_list({ key, value }), "{", "}")
+  def generate({ key, value }) when is_tuple(value) do
+    JSON.generate(key) <> ":" <> JSON.generate([value])
   end
-  
+
   def generate({ key, value }) do
-    JSON.List.container_join(tuple_to_list({ key, value }), "{", "}")
+    JSON.generate(key) <> ":" <> JSON.generate(value)
   end
 
 end
 
 defimpl JSON, for: List do
   def generate([]), do: "{}"
+  def generate([{}]), do: "{}"
 
   def generate([tuple]) when is_tuple(tuple) do
-    JSON.generate(tuple)
+    "{" <> JSON.generate(tuple) <> "}"
   end
 
   def generate(list) when is_list(list) do
-    container_join(list, "[", "]")
+    Binary.Inspect.inspect(list)
   end
 
-  def container_join([h], acc, last) do
-    acc <> JSON.generate(h) <> last
-  end
-
-  def container_join([h|t], acc, last) when is_list(t) do
-    acc = acc <> JSON.generate(h) <> ":"
-    container_join(t, acc, last)
-  end
-
-  def container_join([h|t], acc, last) do
-    acc <> JSON.generate(h) <> "|" <> JSON.generate(t) <> last
-  end
-
-  def container_join([], acc, last) do
-    acc <> last
-  end
 end
