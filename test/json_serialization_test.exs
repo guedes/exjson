@@ -13,4 +13,8 @@ defmodule JSONSerialization.TupleTest do
     assert_equal "{ 'k1': { 'k2': { 'k3': 'v3' } } }", JSONSerialization.to_json( { :k1, { :k2, { :k3, "v3" } } } )
   end
 
+  test :simple_list_to_json do
+    assert_equal "{ 'k2': 'value 2' }", JSONSerialization.to_json( [ { :k2, "value 2"} ] )
+  end
+
 end
