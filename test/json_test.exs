@@ -9,22 +9,34 @@ defmodule JSON.TupleTest do
     assert_equal "{}", JSON.generate([{}])
   end
 
-  test :simple_tuple_generate do
-    assert_equal "{\"k\":\"v\"}", JSON.generate([ { :k, "v" } ])
-    assert_equal "{\"another_key\":\"some value with space\"}", JSON.generate([{ :another_key, "some value with space" }])
+  test :atom_to_quoted do
+    assert_equal "\"name\"", JSON.generate(:name)
+    assert_equal "\"Name\"", JSON.generate(:Name)
+    assert_equal "\"IDs\"", JSON.generate(:"IDs")
   end
 
-  test :nested_tuple_generate do
-    assert_equal "{\"k1\":{\"k2\":\"v2\"}}", JSON.generate([ { :k1, { :k2, "v2" } } ])
-    assert_equal "{\"k1\":{\"k2\":{\"k3\":\"v3\"}}}", JSON.generate([ { :k1, { :k2, { :k3, "v3" } } } ])
+  test :string_to_quoted do
+    assert_equal "\"name\"", JSON.generate("name")
+    assert_equal "\"Name\"", JSON.generate("Name")
+    assert_equal "\"IDs\"", JSON.generate("IDs")
   end
 
-  test :a_tuple_with_list_generate do
-    assert_equal "{\"k\":[1,2,3]}", JSON.generate([ { :k, [ 1, 2, 3 ] } ])
+  test :number_to_quoted do
+    assert_equal "1", JSON.generate(1)
+    assert_equal "1.00000000000000000000e+00", JSON.generate(1.0)
+    assert_equal "1.23101230000000009568e+03", JSON.generate(1231.0123)
   end
 
-  test :simple_list_generate do
-    assert_equal "{\"k2\":\"value 2\"}", JSON.generate([ { :k2, "value 2" } ])
+  test :tuple_to_pair do
+    assert_equal "\"name\":\"A Cool Name\"", JSON.generate({ :name, "A Cool Name" })
+  end
+
+  test :kv_to_json do
+    assert_equal "{\"name\":\"A Cool Name\"}", JSON.generate([ name: "A Cool Name" ])
+  end
+
+  test :complex_json do
+    assert_equal "{\"image\":{\"title\":\"Some View\",\"width\":800}}", JSON.generate([ image: [ width: 800, title: "Some View" ] ])
   end
 
 end

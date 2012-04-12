@@ -1,15 +1,15 @@
 JSON Protocol for Elixir
 ========================
 
-This is an initial work on a [JSON](http://www.ietf.org/rfc/rfc4627.txt) [Protocol](http://elixir-lang.org/getting_started/4.html) in 
+This is an initial work on a [JSON](http://www.ietf.org/rfc/rfc4627.txt) [Protocol](http://elixir-lang.org/getting_started/4.html) in
 [Elixir](http://elixir-lang.org). It is a WIP and only generate JSON from a list of tuples. It doesn't parses JSON yet.
 
 ## Examples
 
 ```elixir
- JSON.generate([ { :key, "some value" } ])          #=> "{\"key\":\"some value\"}"
- JSON.generate([ { :k, [ 1, 2, 3 ] } ])             #=> "{\"k\":[1,2,3]}"
- JSON.generate([ { :k1, { :k2, { :k3, "v3" } } } ]) #=> "{\"k1\":{\"k2\":{\"k3\":\"v3\"}}}", 
+ JSON.generate([ key:, "some value" } ])      #=> "{\"key\":\"some value\"}"
+ JSON.generate([ k:, [ 1, 2, 3 ] } ])         #=> "{\"k\":[1,2,3]}"
+ JSON.generate([ k1: [ k2: [ k3: "v3"  ] ] ]) #=> "{\"k1\":{\"k2\":{\"k3\":\"v3\"}}}",
 ```
 
 ## License
