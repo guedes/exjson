@@ -7,8 +7,8 @@ This is an initial work on a [JSON](http://www.ietf.org/rfc/rfc4627.txt) [Protoc
 ## Examples
 
 ```elixir
- JSON.generate([ key:, "some value" } ])      #=> "{\"key\":\"some value\"}"
- JSON.generate([ k:, [ 1, 2, 3 ] } ])         #=> "{\"k\":[1,2,3]}"
+ JSON.generate([ key: "some value" } ])      #=> "{\"key\":\"some value\"}"
+ JSON.generate([ k: [ 1, 2, 3 ] } ])         #=> "{\"k\":[1,2,3]}"
  JSON.generate([ k1: [ k2: [ k3: "v3"  ] ] ]) #=> "{\"k1\":{\"k2\":{\"k3\":\"v3\"}}}",
 ```
 
