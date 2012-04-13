@@ -25,10 +25,18 @@ defimpl JSON, for: List do
   def generate([{}]), do: "{}"
 
   def generate(list) do
-    if Enum.any?(list, fn(x, do: is_tuple(x))) do
+    if has_tuple?(list) do
       "{#{Enum.join(Enum.map(list, JSON.generate(&1)),",")}}"
     else:
       "[#{Enum.join(Enum.map(list, JSON.generate(&1)),",")}]"
     end
+  end
+
+  defp has_tuple?(list) when is_list(list) do
+    Enum.any?(list, fn(x, do: is_tuple(x)))
+  end
+
+  defp has_tuple?(thing) do
+    false
   end
 end
