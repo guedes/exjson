@@ -26,10 +26,14 @@ defimpl JSON, for: List do
 
   def generate(list) do
     if has_tuple?(list) do
-      "{#{Enum.join(Enum.map(list, JSON.generate(&1)),",")}}"
+      "{#{jsonify(list)}}"
     else:
-      "[#{Enum.join(Enum.map(list, JSON.generate(&1)),",")}]"
+      "[#{jsonify(list)}]"
     end
+  end
+
+  defp jsonify(list) do
+    Enum.join(Enum.map(list, JSON.generate(&1)),",")
   end
 
   defp has_tuple?(list) when is_list(list) do
