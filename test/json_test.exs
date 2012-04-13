@@ -43,4 +43,20 @@ defmodule JSON.TupleTest do
     assert_equal "{\"path\":\"/some/path\",\"tags\":[1,2,3]}", JSON.generate([ path: "/some/path", tags: [ 1, 2, 3 ] ])
   end
 
+  test :rfc4267_json_object do
+    # See http://www.ietf.org/rfc/rfc4627.txt
+    assert_equal "{\"image\":{\"height\":600,\"ids\":[116,943,234,38793],\"thumbnail\":{\"height\":125,\"url\":\"http://www.example.com/image/481989943\",\"width\":100},\"title\":\"View from 15th Floor\",\"width\":800}}", JSON.generate(
+      [ image: [
+          width: 800,
+          height: 600,
+          title: "View from 15th Floor",
+          thumbnail: [
+            url: "http://www.example.com/image/481989943",
+            height: 125,
+            width: 100
+          ],
+          ids: [ 116, 943, 234, 38793 ]
+        ]
+      ])
+  end
 end
