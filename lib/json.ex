@@ -9,32 +9,38 @@ defimpl JSON, for: BitString do
 end
 
 defimpl JSON, for: Number do
-  def generate(integer), do: list_to_binary(integer_to_list(integer))
+  def generate(number), do: "#{number}"
 end
 
 defimpl JSON, for: Tuple do
   def generate({}), do: "{}"
 
-  def generate({ key, value }) when is_tuple(value) do
-    JSON.generate(key) <> ":" <> JSON.generate([value])
+  def generate({key, value}) do
+    "#{JSON.generate(key)}:#{JSON.generate(value)}"
   end
-
-  def generate({ key, value }) do
-    JSON.generate(key) <> ":" <> JSON.generate(value)
-  end
-
 end
 
 defimpl JSON, for: List do
   def generate([]), do: "{}"
   def generate([{}]), do: "{}"
 
-  def generate([tuple]) when is_tuple(tuple) do
-    "{" <> JSON.generate(tuple) <> "}"
+  def generate(list) do
+    if has_tuple?(list) do
+      "{#{jsonify(list)}}"
+    else:
+      "[#{jsonify(list)}]"
+    end
   end
 
-  def generate(list) when is_list(list) do
-    Binary.Inspect.inspect(list)
+  defp jsonify(list) do
+    Enum.join(Enum.map(list, JSON.generate(&1)),",")
   end
 
+  defp has_tuple?(list) when is_list(list) do
+    Enum.any?(list, fn(x, do: is_tuple(x)))
+  end
+
+  defp has_tuple?(thing) do
+    false
+  end
 end
