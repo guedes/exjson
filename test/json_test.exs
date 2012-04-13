@@ -35,8 +35,12 @@ defmodule JSON.TupleTest do
     assert_equal "{\"name\":\"A Cool Name\"}", JSON.generate([ name: "A Cool Name" ])
   end
 
-  test :complex_json do
+  test :nested_kv_to_json do
     assert_equal "{\"image\":{\"title\":\"Some View\",\"width\":800}}", JSON.generate([ image: [ width: 800, title: "Some View" ] ])
+  end
+
+  test :key_with_number_array_as_value_to_json do
+    assert_equal "{\"path\":\"/some/path\",\"tags\":[1,2,3]}", JSON.generate([ path: "/some/path", tags: [ 1, 2, 3 ] ])
   end
 
 end
