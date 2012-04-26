@@ -52,7 +52,9 @@ defmodule JSON.Scanner do
   def parse("false" <> rest), do: { false,  rest }
   def parse("null" <> rest),  do: { nil,    rest }
   def parse([?{ | rest]), do: parse_object(ignore_spaces(rest), [])
-  def parse([]), do: "xxxxx"
+  def parse([?[ | rest]), do: parse_array(ignore_spaces(rest), [])
+
+  def parse([]), do: exit(:unexpected_end_of_input)
   def parse(chars), do: parse_number(chars, [])
 
   def parse_string(chars, acc) do
@@ -70,26 +72,100 @@ defmodule JSON.Scanner do
 
   def parse_general_char(?", rest), do: { :ok, ?", rest }
 
-  def parse_number(a, b) do
-    999
+  def finish_number(acc, rest) do
+    str = List.reverse(acc)
+    {
+    case list_to_integer(str) do
+      match: {'EXIT', _} 
+        list_to_float(str)
+      match: value
+	 value
+    end, 
+    rest
+    }
+  end
+  
+  def parse_number([?- | rest], acc) do
+    parse_signed_number(rest, [?- | acc])
+  end
+  
+  def parse_number(rest = [c | _], acc) do
+    case is_digit(c) do
+      match: true 
+        parse_signed_number(rest, acc)
+      match: false
+        exit(:syntax_error)
+    end
   end
 
-  #def parse_number([?- | rest], acc) do
-  #  parse_signed_number(rest, [?- | acc])
-  #end
+  def parse_signed_number(rest, acc) do
+    { acc, rest } = parse_int_part(rest, acc)
+    case rest do
+      match: []
+        finish_number( acc, [])
+      match: [?. | more]
+        { acc, rest } = parse_int_part(more, [?. | acc])
+        parse_exp(rest, acc, false)
+      else:
+        parse_exp(acc, rest, true)
+    end
+  end
 
-  #def parse_signed_number(rest, acc) do
-  #  { acc, rest } = parse_int_part(rest, acc)
-  #  case rest do
-  #    match: []
-  #      finish_number( acc, [])
-  #    match: [?. | more]
-  #      { acc, rest } = parse_int_part(more, [?. | acc])
-  #      parse_exp(rest, acc, false)
-  #    else:
-  #      parse_exp(acc, rest)
-  #  end
-  #end
+  def parse_int_part(chars = [_ch | _rest], acc) do
+    parse_int_part0(chars, acc)
+  end
+
+  def parse_int_part0([], acc) do
+    { acc, [] }
+  end
+
+  def parse_int_part0([ch | rest], acc) do
+    case is_digit(ch) do
+      match: true
+        parse_int_part0(rest, [ch | acc])
+      match: false
+        { acc, [ch | rest] }
+    end
+  end
+
+  def parse_exp([?e | rest], acc, needfrac) do
+    parse_exp1(rest, acc, needfrac)
+  end
+
+  def parse_exp([?E | rest], acc, needfrac) do
+    parse_exp1(rest, acc, needfrac)
+  end
+
+  def parse_exp(rest, acc, _needfrac) do
+    finish_number(acc, rest)
+  end
+  
+  def parse_exp1(rest, acc, needfrac) do
+    {acc, rest} = parse_signed_int_part(
+                          rest, 
+                          if needfrac do
+                            [?e, ?0, ?. | acc]
+                          else:
+                            [?e | acc]
+			  end)
+
+    finish_number(acc, rest)
+  end
+
+  def parse_signed_int_part([?+ | rest], acc) do
+    parse_int_part(rest, [?+ | acc])
+  end
+
+  def parse_signed_int_part([?- | rest], acc) do
+    parse_int_part(rest, [?- | acc])
+  end
+
+  def parse_signed_int_part(rest, acc) do
+    parse_int_part(rest, acc)
+  end
+
+  def is_digit(n) when is_integer(n), do: n >= ?0 && n <= ?9
+  def is_digit(_), do: false
 
   def parse_object([?} | rest ], acc) do
     { {:obj, List.reverse(acc) }, acc }
@@ -106,48 +182,20 @@ defmodule JSON.Scanner do
     parse_object(ignore_spaces(rest), [ { key_codepoints, value } | acc ])
   end
 
+  def parse_array([?] | rest], acc) do
+    { Lists.reverse(acc), rest }
+  end
 
-  #def json_object("{}"), do: []
+  def parse_array([?, | rest], acc) do
+    parse_array(ignore_spaces(rest), acc)
+  end
 
-  #def json_object(object) do
-  #  regex = %r/\{(.+)\}/
+  def parse_array(chars, acc) do
+    { value, rest } = parse(chars)
+    parse_array(ignore_spaces(rest), [value | acc])
+  end
 
-  #  destructure([_, members ], Regex.run(regex, object))
-  #  [ json_pair(members) ]
-  #end
-
-  #def json_pair(pair) do
-  #  regex = %r/^"(.+)":(.+)$/
-  #  destructure([ _, key, value ], Regex.run(regex, pair))
-  #  { json_string(key, :as_key), json_value(value) }
-  #end
-
-  #def json_string(string, :as_key), do: binary_to_atom(string)
-  #def json_string(string), do: string
-
-  #def json_value("[]"), do: []
-
-  #def json_value("\"" <> value) do
-  #  regex = %r/^(.+)"$/
-  #  destructure([ _, string ], Regex.run(regex, value))
-  #  string
-  #end
-
-  #def json_value("[" <> value) do
-  #  regex = %r/^(.+)]$/
-  #  destructure([ _, array ], Regex.run(regex, value))
-  #  json_array(array)
-  #end
-
-  #def json_array(array) do
-  #  result = Regex.split %r/,/, array
-
-  #  if Regex.match?(%r/^(\d,?)+$/, array) do
-  #    Enum.map(result, fn(x) -> list_to_integer(binary_to_list(x)) end)
-  #  end
-  #end
-
-  defp ignore_spaces(string) when is_binary(string), do: ignore_spaces(binary_to_list(string))
+defp ignore_spaces(string) when is_binary(string), do: ignore_spaces(binary_to_list(string))
   defp ignore_spaces([ c | rest ]) when c <= 32, do: ignore_spaces(rest)
   defp ignore_spaces(chars), do: chars
 end

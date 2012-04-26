@@ -29,16 +29,16 @@ defmodule JSON.Scanner.ParseTest do
   use ExUnit.Case
 
   test :empty_json do
-    assert_equal [], JSON.Scanner.decode("{}")
+    assert [] == JSON.Scanner.decode("{}")
   end
 
   test :simple_kv do
-    assert_equal [ {'key', "value" } ], JSON.Scanner.decode('{"key":"value"}')
+    assert [ {'key', "value" } ] == JSON.Scanner.decode('{"key":"value"}')
   end
 
   test :rfc4267_json_object do
     # See http://www.ietf.org/rfc/rfc4627.txt
-    assert_equal       [ image: [
+    assert [ image: [
           width: 800,
           height: 600,
           title: "View from 15th Floor",
@@ -49,6 +49,6 @@ defmodule JSON.Scanner.ParseTest do
           ],
           ids: [ 116, 943, 234, 38793 ]
         ]
-      ], JSON.Scanner.decode('{"image":{"height":600,"ids":[116,943,234,38793],"thumbnail":{"height":125,"url":"http://www.example.com/image/481989943","width":100},"title":"View from 15th Floor","width":800}}')
+      ] == JSON.Scanner.decode('{"image":{"height":600,"ids":[116,943,234,38793],"thumbnail":{"height":125,"url":"http://www.example.com/image/481989943","width":100},"title":"View from 15th Floor","width":800}}')
   end
 end
