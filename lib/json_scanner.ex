@@ -1,4 +1,4 @@
-require Erlang.erl_scan, as: Scan
+refer Erlang.erl_scan, as: Scan
 
 defmodule JSON.Scanner do
   def scan(thing) when is_binary(thing) do
