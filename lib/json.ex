@@ -1,46 +1,26 @@
-defprotocol JSON, [generate(element)]
+defmodule JSON do
+  @moduledoc """
+  This module creates two short-cut function to Generator and Parser.
+  """
 
-defimpl JSON, for: Atom do
-  def generate(atom), do: Binary.escape(atom_to_binary(atom), ?")
+  @doc """
+  Creates a JSON document from a Elixir data structure.
+
+  ## Examples
+
+      json = JSON.generate([ {"hello", "world"}, { "its", ["is", "very", "nice" ]}])
+      #=> "{\"hello\":\"world\",\"its\":[\"is\",\"very\",\"nice\"]}"
+  """
+  def generate(thing), do: JSON.Generator.generate(thing)
+
+  @doc """
+  Creates a Elixir data structure from a JSON document.
+
+  ## Examples
+
+      json = json = JSON.parse("{\"hello\":\"world\",\"its\":[\"is\",\"very\",\"nice\"]}")
+      #=> [{"hello","world"},{"its",["is","very","nice"]}]
+  """
+  def parse(thing), do: JSON.Parser.parse(thing)
 end
 
-defimpl JSON, for: BitString do
-  def generate(thing), do: Binary.escape(thing, ?")
-end
-
-defimpl JSON, for: Number do
-  def generate(number), do: "#{number}"
-end
-
-defimpl JSON, for: Tuple do
-  def generate({}), do: "{}"
-
-  def generate({key, value}) do
-    "#{JSON.generate(key)}:#{JSON.generate(value)}"
-  end
-end
-
-defimpl JSON, for: List do
-  def generate([]), do: "{}"
-  def generate([{}]), do: "{}"
-
-  def generate(list) do
-    if has_tuple?(list) do
-      "{#{jsonify(list)}}"
-    else:
-      "[#{jsonify(list)}]"
-    end
-  end
-
-  defp jsonify(list) do
-    Enum.join(Enum.map(list, JSON.generate(&1)),",")
-  end
-
-  defp has_tuple?(list) when is_list(list) do
-    Enum.any?(list, fn(x, do: is_tuple(x)))
-  end
-
-  defp has_tuple?(thing) do
-    false
-  end
-end
