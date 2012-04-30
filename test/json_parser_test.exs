@@ -68,7 +68,7 @@ defmodule JSON.Parser.ParseTest do
                 "inside_key": "a value",
                 "bool_value1": true,
                 "bool_value2": false,
-                "nil_value": nil
+                "nil_value": null
               },
               "tags": [ "test1", "test2", "test3" ]
             }')

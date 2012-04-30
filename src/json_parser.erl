@@ -5,12 +5,13 @@ extract_value({_,_,Value}) -> Value.
 
 build_object([L]) when is_list(L) -> L;
 build_object(T) when is_tuple(T)  -> [ T ];
-build_object(Any) -> lists:flatten(Any).
+build_object(Any) -> Any.
 
 build_pair(K, V) -> { list_to_binary(extract_value(K)), V }.
 
 build_atom({_, _, A}) -> build_atom(A);
 build_atom(A) when A == true; A == false ; A == nil -> A;
+build_atom(null) -> nil;
 build_atom(A) -> atom_to_binary(A, utf8).
 
 -file("/usr/lib/erlang/lib/parsetools-2.0.7/include/yeccpre.hrl", 0).
@@ -197,7 +198,7 @@ yecctoken2string(Other) ->
 
 
 
--file("json_parser.erl", 200).
+-file("json_parser.erl", 201).
 
 yeccpars2(0=S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_0(S, Cat, Ss, Stack, T, Ts, Tzr);
@@ -560,4 +561,4 @@ yeccpars2_23_(__Stack0) ->
   end | __Stack].
 
 
--file("json_parser.yrl", 79).
+-file("json_parser.yrl", 80).

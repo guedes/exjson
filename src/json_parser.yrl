@@ -75,4 +75,5 @@ build_pair(K, V) -> { list_to_binary(extract_value(K)), V }.
 
 build_atom({_, _, A}) -> build_atom(A);
 build_atom(A) when A == true; A == false ; A == nil -> A;
+build_atom(null) -> nil;
 build_atom(A) -> atom_to_binary(A, utf8).
