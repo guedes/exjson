@@ -1,10 +1,9 @@
-JSON Protocol for Elixir
-========================
+JSON for Elixir
+===============
 
-This is an initial work on a [JSON](http://www.ietf.org/rfc/rfc4627.txt) [Protocol](http://elixir-lang.org/getting_started/4.html) in
-[Elixir](http://elixir-lang.org). It is a WIP and only generate JSON from a list of tuples. It doesn't parses JSON yet.
+This is an work-in-progress implementation of the [JSON](http://www.json.org) specification to [RFC 4627](http://www.ietf.org/rfc/rfc4627.txt) in [Elixir](http://elixir-lang.org).
 
-## Examples
+## Generating JSON from Elixir
 
 ```elixir
  JSON.generate([ key: "some value" ])
@@ -30,7 +29,35 @@ This is an initial work on a [JSON](http://www.ietf.org/rfc/rfc4627.txt) [Protoc
     ]
  ])
  #=> "{\"image\":{\"height\":600,\"ids\":[116,943,234,38793],\"thumbnail\":{\"height\":125,\"url\":\"http://www.example.com/image/481989943\",\"width\":100},\"title\":\"View from 15th Floor\",\"width\":800}}"
+```
 
+## Parsing JSON to Elixir
+
+```elixir
+ JSON.parse(
+ '{
+   "key": "value",
+   "another_key": {
+     "k1": "v1",
+     "k2": "v2",
+     "k3": "v3"
+   }
+ }')
+ #=> [ { "key", "value" }, { "another_key", [ { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" } ] } ]
+
+ JSON.parse(
+ '{
+    "key": "some value",
+    "another_key": [ "value1", "another value", "value 3" ],
+    "nested_key": {
+      "inside_key": "a value",
+      "bool_value1": true,
+      "bool_value2": false,
+      "nil_value": null
+    },
+    "tags": [ "test1", "test2", "test3" ]
+ }')
+ #=> [ { "key", "some value" }, { "another_key", [ "value1", "another value", "value 3" ] }, { "nested_key", [ { "inside_key", "a value" }, { "bool_value1", true }, { "bool_value2", false }, { "nil_value", nil } ] }, { "tags", [ "test1", "test2", "test3" ] } ]
 ```
 
 ## License
