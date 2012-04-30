@@ -29,6 +29,7 @@ This is a work-in-progress [JSON](http://www.ietf.org/rfc/rfc4627.txt) parser an
     ]
  ])
  #=> "{\"image\":{\"height\":600,\"ids\":[116,943,234,38793],\"thumbnail\":{\"height\":125,\"url\":\"http://www.example.com/image/481989943\",\"width\":100},\"title\":\"View from 15th Floor\",\"width\":800}}"
+```
 
 ## Parsing JSON to Elixir
 
@@ -57,6 +58,7 @@ This is a work-in-progress [JSON](http://www.ietf.org/rfc/rfc4627.txt) parser an
     "tags": [ "test1", "test2", "test3" ]
  }')
  #=> [ { "key", "some value" }, { "another_key", [ "value1", "another value", "value 3" ] }, { "nested_key", [ { "inside_key", "a value" }, { "bool_value1", true }, { "bool_value2", false }, { "nil_value", nil } ] }, { "tags", [ "test1", "test2", "test3" ] } ]
+```
 
 ## License
 
