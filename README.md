@@ -1,7 +1,7 @@
 JSON for Elixir
 ===============
 
-This is a work-in-progress [JSON](http://www.ietf.org/rfc/rfc4627.txt) parser and genarator in [Elixir](http://elixir-lang.org).
+This is an work-in-progress implementation of the [JSON](http://www.json.org) specification to [RFC 4627](http://www.ietf.org/rfc/rfc4627.txt) in [Elixir](http://elixir-lang.org).
 
 ## Generating JSON from Elixir
 
