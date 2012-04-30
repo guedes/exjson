@@ -1,4 +1,4 @@
-% Grammar for the JSON specification with yecc
+% Grammar for the JSON specification with yacc
 % Copyright (C) 2012 Dickson S. Guedes
 
 Nonterminals
