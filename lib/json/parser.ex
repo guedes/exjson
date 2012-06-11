@@ -1,4 +1,4 @@
-refer Erlang.json_parser, as: Parser
+alias Erlang.json_parser, as: Parser
 defmodule JSON.Parser do
 
   def parse(thing) when is_binary(thing) do

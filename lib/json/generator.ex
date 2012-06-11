@@ -29,7 +29,7 @@ defimpl JSON.Generator, for: List do
   def generate(list) do
     if has_tuple?(list) do
       "{#{jsonify(list)}}"
-    else:
+    else
       "[#{jsonify(list)}]"
     end
   end
