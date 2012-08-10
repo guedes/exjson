@@ -1,16 +1,18 @@
-refer Erlang.json_parser, as: Parser
+alias Erlang.json_parser, as: Parser
 defmodule JSON.Parser do
 
   def parse(thing) when is_binary(thing) do
-    parse(binary_to_list(thing))
+      parse(binary_to_list(thing))
   end
 
   def parse(thing) when is_list(thing) do
-    tokens = JSON.Scanner.scan(thing)
-    parse(tokens)
+      tokens = JSON.Scanner.scan(thing)
+      parse(tokens)
   end
 
   def parse({:ok, list, _}) do
-    Parser.parse(list)[2]
+      result = Parser.parse(list)
+      elem(result, 2)
   end
+
 end
