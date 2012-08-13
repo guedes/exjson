@@ -10,7 +10,7 @@ exbin: lib/*.ex
 	@ echo Compiling Elixir code ...
 	@ mkdir -p ${EBIN_DIR}
 	@ touch ${EBIN_DIR}
-	elixirc --docs -pa ${EBIN_DIR} lib/*/*/*.ex lib/*/*.ex lib/*.ex -o ${EBIN_DIR}
+	elixirc -pa ${EBIN_DIR} lib/*/*/*.ex lib/*/*.ex lib/*.ex -o ${EBIN_DIR}
 	@ echo
 
 ebin: src/*.erl
