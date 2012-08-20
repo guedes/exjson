@@ -21,9 +21,9 @@ Terminals
 
 Rootsymbol object.
 
-Nonassoc 10 array.
-Nonassoc 80 object.
-Nonassoc 160 value.
+Nonassoc 10 object.
+Nonassoc 20 value.
+Nonassoc 30 array.
 
 object ->   '$empty' :
 	    [].
