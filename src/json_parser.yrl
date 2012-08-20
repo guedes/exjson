@@ -21,6 +21,10 @@ Terminals
 
 Rootsymbol object.
 
+Nonassoc 10 array.
+Nonassoc 80 object.
+Nonassoc 160 value.
+
 object ->   '$empty' :
 	    [].
 object ->
@@ -29,6 +33,9 @@ object ->
 object ->
 	    '{' members '}' :
 	    build_object('$2').
+object ->
+        array :
+        '$1'.
 members ->
 	    pair :
 	    '$1'.

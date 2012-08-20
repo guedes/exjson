@@ -1,20 +1,17 @@
 EBIN_DIR=ebin
-EXBIN_DIR=exbin
 
 .PHONY: test clean
 
-compile: ebin exbin
+compile: erlang elixir
 
-exbin: lib/*.ex
-	@ rm -f ${EBIN_DIR}/::*.beam
+elixir: lib/*.ex
 	@ echo Compiling Elixir code ...
 	@ mkdir -p ${EBIN_DIR}
 	@ touch ${EBIN_DIR}
 	elixirc -pa ${EBIN_DIR} lib/*/*/*.ex lib/*/*.ex lib/*.ex -o ${EBIN_DIR}
 	@ echo
 
-ebin: src/*.erl
-	@ rm -f ${EBIN_DIR}/::*.beam
+erlang: src/*.erl
 	@ echo Compiling Erlang code ...
 	@ mkdir -p ${EBIN_DIR}
 	@ touch ${EBIN_DIR}
