@@ -1,6 +1,6 @@
 -module(json_parser).
 -export([parse/1, parse_and_scan/1, format_error/1]).
--file("src/json_parser.yrl", 77).
+-file("src/json_parser.yrl", 78).
 extract_value({_,_,Value}) -> Value.
 
 build_object([L]) when is_list(L) -> L;
@@ -242,8 +242,8 @@ yeccpars2(17=S, Cat, Ss, Stack, T, Ts, Tzr) ->
 %%  yeccpars2_19(S, Cat, Ss, Stack, T, Ts, Tzr);
 %% yeccpars2(20=S, Cat, Ss, Stack, T, Ts, Tzr) ->
 %%  yeccpars2_20(S, Cat, Ss, Stack, T, Ts, Tzr);
-yeccpars2(21=S, Cat, Ss, Stack, T, Ts, Tzr) ->
- yeccpars2_21(S, Cat, Ss, Stack, T, Ts, Tzr);
+%% yeccpars2(21=S, Cat, Ss, Stack, T, Ts, Tzr) ->
+%%  yeccpars2_21(S, Cat, Ss, Stack, T, Ts, Tzr);
 yeccpars2(22=S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_22(S, Cat, Ss, Stack, T, Ts, Tzr);
 yeccpars2(23=S, Cat, Ss, Stack, T, Ts, Tzr) ->
@@ -271,8 +271,6 @@ yeccpars2_2(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
 
 yeccpars2_3(S, '[', Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 3, Ss, Stack, T, Ts, Tzr);
-yeccpars2_3(S, ']', Ss, Stack, T, Ts, Tzr) ->
- yeccpars1(S, 21, Ss, Stack, T, Ts, Tzr);
 yeccpars2_3(S, atom, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 13, Ss, Stack, T, Ts, Tzr);
 yeccpars2_3(S, integer, Ss, Stack, T, Ts, Tzr) ->
@@ -336,8 +334,7 @@ yeccpars2_11(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccgoto_value(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 yeccpars2_12(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
- NewStack = yeccpars2_12_(Stack),
- yeccgoto_value(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
+ yeccgoto_object(hd(Ss), Cat, Ss, Stack, T, Ts, Tzr).
 
 yeccpars2_13(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_13_(Stack),
@@ -369,7 +366,8 @@ yeccpars2_18(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
 yeccpars2_19(S, ',', Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 23, Ss, Stack, T, Ts, Tzr);
 yeccpars2_19(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
- yeccgoto_elements(hd(Ss), Cat, Ss, Stack, T, Ts, Tzr).
+ NewStack = yeccpars2_19_(Stack),
+ yeccgoto_elements(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 yeccpars2_20(S, ']', Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 22, Ss, Stack, T, Ts, Tzr);
@@ -446,21 +444,21 @@ yeccgoto_value(23, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_19(19, Cat, Ss, Stack, T, Ts, Tzr).
 
 -compile({inline,yeccpars2_0_/1}).
--file("src/json_parser.yrl", 25).
+-file("src/json_parser.yrl", 26).
 yeccpars2_0_(__Stack0) ->
  [begin
    [ ]
   end | __Stack0].
 
 -compile({inline,yeccpars2_3_/1}).
--file("src/json_parser.yrl", 25).
+-file("src/json_parser.yrl", 26).
 yeccpars2_3_(__Stack0) ->
  [begin
    [ ]
   end | __Stack0].
 
 -compile({inline,yeccpars2_8_/1}).
--file("src/json_parser.yrl", 28).
+-file("src/json_parser.yrl", 29).
 yeccpars2_8_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -468,14 +466,14 @@ yeccpars2_8_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_9_/1}).
--file("src/json_parser.yrl", 25).
+-file("src/json_parser.yrl", 26).
 yeccpars2_9_(__Stack0) ->
  [begin
    [ ]
   end | __Stack0].
 
 -compile({inline,yeccpars2_10_/1}).
--file("src/json_parser.yrl", 43).
+-file("src/json_parser.yrl", 44).
 yeccpars2_10_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -483,23 +481,15 @@ yeccpars2_10_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_11_/1}).
--file("src/json_parser.yrl", 65).
+-file("src/json_parser.yrl", 66).
 yeccpars2_11_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
    build_object ( __1 )
   end | __Stack].
 
--compile({inline,yeccpars2_12_/1}).
--file("src/json_parser.yrl", 68).
-yeccpars2_12_(__Stack0) ->
- [__1 | __Stack] = __Stack0,
- [begin
-   lists : flatten ( __1 )
-  end | __Stack].
-
 -compile({inline,yeccpars2_13_/1}).
--file("src/json_parser.yrl", 71).
+-file("src/json_parser.yrl", 72).
 yeccpars2_13_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -507,7 +497,7 @@ yeccpars2_13_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_14_/1}).
--file("src/json_parser.yrl", 62).
+-file("src/json_parser.yrl", 63).
 yeccpars2_14_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -515,7 +505,7 @@ yeccpars2_14_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_15_/1}).
--file("src/json_parser.yrl", 59).
+-file("src/json_parser.yrl", 60).
 yeccpars2_15_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -523,7 +513,7 @@ yeccpars2_15_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_16_/1}).
--file("src/json_parser.yrl", 31).
+-file("src/json_parser.yrl", 32).
 yeccpars2_16_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -531,15 +521,23 @@ yeccpars2_16_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_18_/1}).
--file("src/json_parser.yrl", 40).
+-file("src/json_parser.yrl", 41).
 yeccpars2_18_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
    [ __1 ] ++ lists : flatten ( [ __3 ] )
   end | __Stack].
 
+-compile({inline,yeccpars2_19_/1}).
+-file("src/json_parser.yrl", 54).
+yeccpars2_19_(__Stack0) ->
+ [__1 | __Stack] = __Stack0,
+ [begin
+   [ __1 ]
+  end | __Stack].
+
 -compile({inline,yeccpars2_21_/1}).
--file("src/json_parser.yrl", 47).
+-file("src/json_parser.yrl", 48).
 yeccpars2_21_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -547,7 +545,7 @@ yeccpars2_21_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_22_/1}).
--file("src/json_parser.yrl", 50).
+-file("src/json_parser.yrl", 51).
 yeccpars2_22_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -555,19 +553,19 @@ yeccpars2_22_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_23_/1}).
--file("src/json_parser.yrl", 25).
+-file("src/json_parser.yrl", 26).
 yeccpars2_23_(__Stack0) ->
  [begin
    [ ]
   end | __Stack0].
 
 -compile({inline,yeccpars2_24_/1}).
--file("src/json_parser.yrl", 56).
+-file("src/json_parser.yrl", 57).
 yeccpars2_24_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
-   [ __1 ] ++ [ __3 ]
+   [ __1 | __3 ]
   end | __Stack].
 
 
--file("src/json_parser.yrl", 90).
+-file("src/json_parser.yrl", 91).

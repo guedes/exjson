@@ -86,80 +86,80 @@ defmodule JSON.Parser.ParseTest do
                             ]')
   end
 
-#  test :array_object do
-#    assert [
-#            [
-#              { "key", "some value" },
-#              { "another_key", [ "value1", "another value", "value 3" ] },
-#              { "nested_key", [
-#                 { "inside_key", "a value" },
-#                 { "bool_value1", true },
-#                 { "bool_value2", false },
-#                 { "nil_value", nil }
-#                 ]
-#              },
-#              { "tags", [ "test1", "test2", "test3" ] }
-#            ],
-#            [
-#              { "key", "some value2" },
-#              { "another_key", [ "value12", "another value2", "value 32" ] },
-#              { "nested_key", [
-#                 { "inside_key", "a value2" },
-#                 { "bool_value1", true },
-#                 { "bool_value2", false },
-#                 { "nil_value", nil }
-#                 ]
-#              },
-#              { "tags", [ "test12", "test22", "test32" ] }
-#            ],
-#            [
-#              { "key", "some value2" },
-#              { "another_key", [ "value12", "another value2", "value 32" ] },
-#              { "nested_key", [
-#                 { "inside_key", "a value2" },
-#                 { "bool_value1", true },
-#                 { "bool_value2", false },
-#                 { "nil_value", nil }
-#                 ]
-#              },
-#              { "tags", [ "test12", "test22", "test32" ] }
-#            ]
-#
-#           ] == JSON.parse(
-#           '[{
-#              "key": "some value",
-#              "another_key": [ "value1", "another value", "value 3" ],
-#              "nested_key": {
-#                "inside_key": "a value",
-#                "bool_value1": true,
-#                "bool_value2": false,
-#                "nil_value": null
-#              },
-#              "tags": [ "test1", "test2", "test3" ]
-#            },
-#            {
-#              "key": "some value2",
-#              "another_key": [ "value12", "another value2", "value 32" ],
-#              "nested_key": {
-#                "inside_key": "a value2",
-#                "bool_value1": true,
-#                "bool_value2": false,
-#                "nil_value": null
-#              },
-#              "tags": [ "test12", "test22", "test32" ]
-#            },
-#            {
-#              "key": "some value2",
-#              "another_key": [ "value12", "another value2", "value 32" ],
-#              "nested_key": {
-#                "inside_key": "a value2",
-#                "bool_value1": true,
-#                "bool_value2": false,
-#                "nil_value": null
-#              },
-#              "tags": [ "test12", "test22", "test32" ]
-#            }]
-#            ')
-#  end
+  test :array_object do
+    assert [
+            [
+              { "key", "some value" },
+              { "another_key", [ "value1", "another value", "value 3" ] },
+              { "nested_key", [
+                 { "inside_key", "a value" },
+                 { "bool_value1", true },
+                 { "bool_value2", false },
+                 { "nil_value", nil }
+                 ]
+              },
+              { "tags", [ "test1", "test2", "test3" ] }
+            ],
+            [
+              { "key", "some value2" },
+              { "another_key", [ "value12", "another value2", "value 32" ] },
+              { "nested_key", [
+                 { "inside_key", "a value2" },
+                 { "bool_value1", true },
+                 { "bool_value2", false },
+                 { "nil_value", nil }
+                 ]
+              },
+              { "tags", [ "test12", "test22", "test32" ] }
+            ],
+            [
+              { "key", "some value2" },
+              { "another_key", [ "value12", "another value2", "value 32" ] },
+              { "nested_key", [
+                 { "inside_key", "a value2" },
+                 { "bool_value1", true },
+                 { "bool_value2", false },
+                 { "nil_value", nil }
+                 ]
+              },
+              { "tags", [ "test12", "test22", "test32" ] }
+            ]
+
+           ] == JSON.parse(
+           '[{
+              "key": "some value",
+              "another_key": [ "value1", "another value", "value 3" ],
+              "nested_key": {
+                "inside_key": "a value",
+                "bool_value1": true,
+                "bool_value2": false,
+                "nil_value": null
+              },
+              "tags": [ "test1", "test2", "test3" ]
+            },
+            {
+              "key": "some value2",
+              "another_key": [ "value12", "another value2", "value 32" ],
+              "nested_key": {
+                "inside_key": "a value2",
+                "bool_value1": true,
+                "bool_value2": false,
+                "nil_value": null
+              },
+              "tags": [ "test12", "test22", "test32" ]
+            },
+            {
+              "key": "some value2",
+              "another_key": [ "value12", "another value2", "value 32" ],
+              "nested_key": {
+                "inside_key": "a value2",
+                "bool_value1": true,
+                "bool_value2": false,
+                "nil_value": null
+              },
+              "tags": [ "test12", "test22", "test32" ]
+            }]
+            ')
+  end
 end
 

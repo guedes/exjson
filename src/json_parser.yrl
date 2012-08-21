@@ -1,4 +1,5 @@
 % Grammar for the JSON specification with yecc
+
 % Copyright (C) 2012 Dickson S. Guedes
 
 Nonterminals
@@ -22,8 +23,6 @@ Terminals
 Rootsymbol object.
 
 Nonassoc 10 object.
-Nonassoc 20 value.
-Nonassoc 30 array.
 
 object ->   '$empty' :
 	    [].
@@ -54,10 +53,10 @@ array ->
 	    '$2'.
 elements ->
 	    value :
-	    '$1'.
+	    ['$1'].
 elements ->
 	    value ',' elements :
-	    ['$1'] ++ ['$3'].
+	    ['$1'|'$3'].
 value ->
 	    string :
 	    list_to_binary(extract_value('$1')).
