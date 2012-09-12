@@ -12,7 +12,7 @@ defmodule JSON.Parser do
 
   def parse({:ok, list, _}) do
       result = Parser.parse(list)
-      elem(result, 2)
+      elem(result, 1)
   end
 
 end
