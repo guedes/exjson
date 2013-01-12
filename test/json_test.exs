@@ -36,7 +36,7 @@ defmodule JSON.TupleTest do
   end
 
   test :nested_kv_to_json do
-    assert "{\"image\":{\"title\":\"Some View\",\"width\":800}}" == JSON.generate([ image: [ width: 800, title: "Some View" ] ])
+    assert "{\"image\":{\"title\":\"Some View\",\"width\":800}}" == JSON.generate([ image: [ title: "Some View", width: 800 ] ])
   end
 
   test :key_with_number_array_as_value_to_json do
@@ -47,15 +47,15 @@ defmodule JSON.TupleTest do
     # See http://www.ietf.org/rfc/rfc4627.txt
     assert "{\"image\":{\"height\":600,\"ids\":[116,943,234,38793],\"thumbnail\":{\"height\":125,\"url\":\"http://www.example.com/image/481989943\",\"width\":100},\"title\":\"View from 15th Floor\",\"width\":800}}"  == JSON.generate(
       [ image: [
-          width: 800,
           height: 600,
-          title: "View from 15th Floor",
+          ids: [ 116, 943, 234, 38793 ],
           thumbnail: [
-            url: "http://www.example.com/image/481989943",
             height: 125,
+            url: "http://www.example.com/image/481989943",
             width: 100
           ],
-          ids: [ 116, 943, 234, 38793 ]
+          title: "View from 15th Floor",
+          width: 800
         ]
       ])
   end
