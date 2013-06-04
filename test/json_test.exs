@@ -23,8 +23,8 @@ defmodule JSON.TupleTest do
 
   test :number_to_quoted do
     assert "1" ==  JSON.generate(1)
-    assert "1.00000000000000000000e+00" ==  JSON.generate(1.0)
-    assert "1.23101230000000009568e+03" ==  JSON.generate(1231.0123)
+    assert "1.0" ==  JSON.generate(1.0)
+    assert "1231.01230000000009567884" ==  JSON.generate(1231.0123)
   end
 
   test :tuple_to_pair do
