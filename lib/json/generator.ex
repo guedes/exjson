@@ -3,11 +3,11 @@ defprotocol JSON.Generator do
 end
 
 defimpl JSON.Generator, for: Atom do
-  def generate(atom), do: Binary.Inspect.Utils.escape(atom_to_binary(atom), ?")
+  def generate(atom), do: Inspect.BitString.inspect(atom_to_binary(atom), ?")
 end
 
 defimpl JSON.Generator, for: BitString do
-  def generate(thing), do: Binary.Inspect.Utils.escape(thing, ?")
+  def generate(thing), do: Inspect.BitString.inspect(thing, ?")
 end
 
 defimpl JSON.Generator, for: Number do
