@@ -1,6 +1,6 @@
 defmodule JSON.Scanner do
   def scan(thing) when is_binary(thing) do
-    String.to_char_list!(thing)
+    binary_to_list(thing)
   end
 
   def scan(string) do

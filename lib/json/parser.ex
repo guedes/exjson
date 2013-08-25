@@ -1,7 +1,7 @@
 defmodule JSON.Parser do
 
   def parse(thing) when is_binary(thing) do
-      parse(String.to_char_list!(thing))
+      parse(binary_to_list(thing))
   end
 
   def parse(thing) when is_list(thing) do
