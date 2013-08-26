@@ -31,6 +31,10 @@ defmodule JSON.TupleTest do
     assert [ { "another_key", [ 1.0, 0.2, 3.3 ] } ] == JSON.parse('{ "another_key": [ 1.0, 0.2, 3.3 ] }')
   end
 
+  test :brackets_inside_string do
+    assert [ {"output_wrap_begin" , "[[" }, { "output_wrap_end", "]]" } ] == JSON.parse('{"output_wrap_begin":"[[","output_wrap_end":"]]"}')
+  end
+
   test :tuple_to_pair do
     assert "\"name\":\"A Cool Name\"", JSON.generate({ :name , "A Cool Name" })
   end
