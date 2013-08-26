@@ -17,6 +17,7 @@ Terminals
     ':' ','
     string
     integer
+    float
     atom
     .
 
@@ -62,6 +63,9 @@ value ->
 	    list_to_binary(extract_value('$1')).
 value ->
 	    integer :
+	    extract_value('$1').
+value ->
+	    float :
 	    extract_value('$1').
 value ->
 	    object :

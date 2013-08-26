@@ -27,6 +27,10 @@ defmodule JSON.TupleTest do
     assert "1231.0123" ==  JSON.generate(1231.0123)
   end
 
+  test :float_array_test do
+    assert [ { "another_key", [ 1.0, 0.2, 3.3 ] } ] == JSON.parse('{ "another_key": [ 1.0, 0.2, 3.3 ] }')
+  end
+
   test :tuple_to_pair do
     assert "\"name\":\"A Cool Name\"", JSON.generate({ :name , "A Cool Name" })
   end
