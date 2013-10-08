@@ -1,5 +1,3 @@
-Code.require_file "../test_helper.exs", __FILE__
-
 defmodule JSON.Parser.ParseTest do
   use ExUnit.Case
 
@@ -126,7 +124,7 @@ defmodule JSON.Parser.ParseTest do
             ]
 
            ] == JSON.parse(
-           %b([{
+           %s([{
               "key": "some value",
               "another_key": [ "value1", "another value", "value 3" ],
               "nested_key": {
