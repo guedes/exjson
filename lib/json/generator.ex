@@ -35,7 +35,7 @@ defimpl JSON.Generator, for: List do
   end
 
   defp jsonify(list) do
-    Enum.join(Enum.map(list, JSON.Generator.generate(&1)),",")
+    Enum.join(Enum.map(list, &JSON.Generator.generate(&1)),",")
   end
 
   defp has_tuple?(list) when is_list(list) do
