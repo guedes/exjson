@@ -126,7 +126,7 @@ defmodule JSON.Parser.ParseTest do
             ]
 
            ] == JSON.parse(
-           %b([{
+           %c([{
               "key": "some value",
               "another_key": [ "value1", "another value", "value 3" ],
               "nested_key": {
