@@ -10,7 +10,11 @@ defimpl JSON.Generator, for: BitString do
   def generate(thing), do: Inspect.BitString.inspect(thing, ?")
 end
 
-defimpl JSON.Generator, for: Number do
+defimpl JSON.Generator, for: Float do
+  def generate(number), do: "#{number}"
+end
+
+defimpl JSON.Generator, for: Integer do
   def generate(number), do: "#{number}"
 end
 
