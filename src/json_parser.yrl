@@ -60,7 +60,7 @@ elements ->
 	    ['$1'|'$3'].
 value ->
 	    string :
-	    list_to_binary(extract_value('$1')).
+	    unicode:characters_to_binary(extract_value('$1')).
 value ->
 	    integer :
 	    extract_value('$1').
@@ -84,7 +84,7 @@ build_object([L]) when is_list(L) -> L;
 build_object(T) when is_tuple(T)  -> [ T ];
 build_object(Any) -> Any.
 
-build_pair(K, V) -> { list_to_binary(extract_value(K)), V }.
+build_pair(K, V) -> { unicode:characters_to_binary(extract_value(K)), V }.
 
 build_atom({_, _, A}) -> build_atom(A);
 build_atom(A) when A == true; A == false ; A == nil -> A;
