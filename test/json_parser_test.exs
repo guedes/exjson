@@ -57,7 +57,8 @@ defmodule JSON.Parser.ParseTest do
                { "nil_value", nil }
                ]
             },
-            { "tags", [ "test1", "test2", "test3" ] }
+            { "tags", [ "test1", "test2", "test3" ] },
+            { "encoded", "знач" }
            ] == JSON.parse(
            '{
               "key": "some value",
@@ -68,7 +69,8 @@ defmodule JSON.Parser.ParseTest do
                 "bool_value2": false,
                 "nil_value": null
               },
-              "tags": [ "test1", "test2", "test3" ]
+              "tags": [ "test1", "test2", "test3" ],
+              "encoded": "знач"
             }')
   end
 
