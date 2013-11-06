@@ -7,7 +7,7 @@ build_object([L]) when is_list(L) -> L;
 build_object(T) when is_tuple(T)  -> [ T ];
 build_object(Any) -> Any.
 
-build_pair(K, V) -> { list_to_binary(extract_value(K)), V }.
+build_pair(K, V) -> { unicode:characters_to_binary(extract_value(K)), V }.
 
 build_atom({_, _, A}) -> build_atom(A);
 build_atom(A) when A == true; A == false ; A == nil -> A;
@@ -529,7 +529,7 @@ yeccpars2_15_(__Stack0) ->
 yeccpars2_16_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
-   list_to_binary ( extract_value ( __1 ) )
+   unicode:characters_to_binary ( extract_value ( __1 ) )
   end | __Stack].
 
 -compile({inline,yeccpars2_17_/1}).
