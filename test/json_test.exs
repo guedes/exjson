@@ -49,6 +49,11 @@ defmodule JSON.TupleTest do
     assert "{\"path\":\"/some/path\",\"tags\":[1,2,3]}" == JSON.generate([ path: "/some/path", tags: [ 1, 2, 3 ] ])
   end
 
+  test :json_string_with_unicode do
+    assert "{\"email\":\"cc@example.com\",\"password\":\"abc\",\"_utf8\":\"☃\"}" == JSON.generate([ email: "cc@example.com", password: "abc", _utf8: "☃" ])
+    assert [ { "email", "cc@example.com" }, { "password", "abc"}, { "_utf8", "☃" } ] == JSON.parse("{\"email\":\"cc@example.com\", \"password\": \"abc\",\"_utf8\":\"☃\"}") 
+  end
+
   test :rfc4267_json_object do
     # See http://www.ietf.org/rfc/rfc4627.txt
     assert "{\"image\":{\"height\":600,\"ids\":[116,943,234,38793],\"thumbnail\":{\"height\":125,\"url\":\"http://www.example.com/image/481989943\",\"width\":100},\"title\":\"View from 15th Floor\",\"width\":800}}"  == JSON.generate(
