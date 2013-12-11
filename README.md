@@ -1,7 +1,7 @@
 JSON for Elixir
 ===============
 
-This is an work-in-progress implementation of the [JSON](http://www.json.org) specification to [RFC 4627](http://www.ietf.org/rfc/rfc4627.txt) in [Elixir](http://elixir-lang.org).
+[Elixir](http://elixir-lang.org) implementation (with an Erlang parser) of the [JSON](http://www.json.org) specification to [RFC 4627](http://www.ietf.org/rfc/rfc4627.txt).
 
 ## Generating JSON from Elixir
 
@@ -62,7 +62,7 @@ This is an work-in-progress implementation of the [JSON](http://www.json.org) sp
 
 ## License
 
-Copyright 2012 Dickson S. Guedes.
+Copyright 2012,2013 Dickson S. Guedes.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
