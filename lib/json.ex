@@ -1,26 +1,23 @@
 defmodule JSON do
   @moduledoc """
-  This module creates two short-cut function to Generator and Parser.
+  This module was DEPRECATED, use `ExJSON` instead
   """
+
+  require ExJSON.Deprecation
+
 
   @doc """
-  Creates a JSON document from a Elixir data structure.
-
-  ## Examples
-
-      json = JSON.generate([ {"hello", "world"}, { "its", ["is", "very", "nice" ]}])
-      #=> "{\"hello\":\"world\",\"its\":[\"is\",\"very\",\"nice\"]}"
+  DEPRECATED! Use `ExJSON.generate/1` instead.
   """
-  def generate(thing), do: JSON.Generator.generate(thing)
+  def generate(thing) do
+    ExJSON.Deprecation.handle(:generate, thing)
+  end
 
   @doc """
-  Creates a Elixir data structure from a JSON document.
-
-  ## Examples
-
-      json = json = JSON.parse("{\"hello\":\"world\",\"its\":[\"is\",\"very\",\"nice\"]}")
-      #=> [{"hello","world"},{"its",["is","very","nice"]}]
+  DEPRECATED! Use `ExJSON.parse/1` instead.
   """
-  def parse(thing), do: JSON.Parser.parse(thing)
+  def parse(thing) do
+    ExJSON.Deprecation.handle(:parse, thing)
+  end
 end
 

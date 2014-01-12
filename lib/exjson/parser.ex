@@ -1,11 +1,11 @@
-defmodule JSON.Parser do
+defmodule ExJSON.Parser do
 
   def parse(thing) when is_binary(thing) do
       parse(String.to_char_list!(thing))
   end
 
   def parse(thing) when is_list(thing) do
-      tokens = JSON.Scanner.scan(thing)
+      tokens = ExJSON.Scanner.scan(thing)
       parse(tokens)
   end
 

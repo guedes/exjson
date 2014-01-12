@@ -1,9 +1,9 @@
-defmodule Exjson.Mixfile do
+defmodule ExJSON.Mixfile do
   use Mix.Project
 
   def project do
     [ app: :exjson,
-      version: "0.0.1",
+      version: "0.2.0",
       deps: deps ]
   end
 

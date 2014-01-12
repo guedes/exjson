@@ -1,16 +1,16 @@
-defmodule JSON.Parser.ParseTest do
+defmodule ExJSON.Parser.ParseTest do
   use ExUnit.Case
 
   test :simple_tuple do
-    assert [ { "key", "some value" } ] == JSON.parse("{\"key\":\"some value\"}")
+    assert [ { "key", "some value" } ] == ExJSON.parse("{\"key\":\"some value\"}")
   end
 
   test :string_array_test do
-    assert [ { "another_key", [ "value1", "another value", "value 3" ] } ] == JSON.parse('{ "another_key": [ "value1", "another value", "value 3" ] }')
+    assert [ { "another_key", [ "value1", "another value", "value 3" ] } ] == ExJSON.parse('{ "another_key": [ "value1", "another value", "value 3" ] }')
   end
 
   test :integer_array_test do
-    assert [ { "another_key", [ 1, 2, 3 ] } ] == JSON.parse('{ "another_key": [ 1, 2, 3 ] }')
+    assert [ { "another_key", [ 1, 2, 3 ] } ] == ExJSON.parse('{ "another_key": [ 1, 2, 3 ] }')
   end
 
   test :three_keys do
@@ -18,7 +18,7 @@ defmodule JSON.Parser.ParseTest do
             { "k1", "v1" },
             { "k2", "v2" },
             { "k3", "v3" }
-           ] == JSON.parse(
+           ] == ExJSON.parse(
            '{
               "k1": "v1",
               "k2": "v2",
@@ -35,7 +35,7 @@ defmodule JSON.Parser.ParseTest do
                 { "k3", "v3" }
               ]
             }
-           ] == JSON.parse(
+           ] == ExJSON.parse(
            '{
               "key": "value",
               "another_key": {
@@ -59,7 +59,7 @@ defmodule JSON.Parser.ParseTest do
             },
             { "tags", [ "test1", "test2", "test3" ] },
             { "encoded", "знач" }
-           ] == JSON.parse(
+           ] == ExJSON.parse(
            '{
               "key": "some value",
               "another_key": [ "value1", "another value", "value 3" ],
@@ -79,7 +79,7 @@ defmodule JSON.Parser.ParseTest do
             [ {"a","b"}, {"c","d"} ],
             [ {"a1","b1"}, {"c1","d1"} ],
             [ {"a2","b2"}, {"c2","d2"} ]
-           ] == JSON.parse('[
+           ] == ExJSON.parse('[
                              { "a": "b", "c": "d" },
                              { "a1": "b1", "c1": "d1" },
                              { "a2": "b2", "c2": "d2" }
@@ -125,7 +125,7 @@ defmodule JSON.Parser.ParseTest do
               { "tags", [ "test12", "test22", "test32" ] }
             ]
 
-           ] == JSON.parse(
+           ] == ExJSON.parse(
            %s([{
               "key": "some value",
               "another_key": [ "value1", "another value", "value 3" ],

@@ -1,32 +1,32 @@
-defprotocol JSON.Generator do
+defprotocol ExJSON.Generator do
   def generate(element)
 end
 
-defimpl JSON.Generator, for: Atom do
+defimpl ExJSON.Generator, for: Atom do
   def generate(atom), do: inspect(atom_to_binary(atom))
 end
 
-defimpl JSON.Generator, for: BitString do
+defimpl ExJSON.Generator, for: BitString do
   def generate(thing), do: inspect(thing)
 end
 
-defimpl JSON.Generator, for: Float do
+defimpl ExJSON.Generator, for: Float do
   def generate(number), do: "#{number}"
 end
 
-defimpl JSON.Generator, for: Integer do
+defimpl ExJSON.Generator, for: Integer do
   def generate(number), do: "#{number}"
 end
 
-defimpl JSON.Generator, for: Tuple do
+defimpl ExJSON.Generator, for: Tuple do
   def generate({}), do: "{}"
 
   def generate({key, value}) do
-    "#{JSON.Generator.generate(key)}:#{JSON.Generator.generate(value)}"
+    "#{ExJSON.Generator.generate(key)}:#{ExJSON.Generator.generate(value)}"
   end
 end
 
-defimpl JSON.Generator, for: List do
+defimpl ExJSON.Generator, for: List do
   def generate([]), do: "{}"
   def generate([{}]), do: "{}"
 
@@ -39,7 +39,7 @@ defimpl JSON.Generator, for: List do
   end
 
   defp jsonify(list) do
-    Enum.join(Enum.map(list, &JSON.Generator.generate(&1)),",")
+    Enum.join(Enum.map(list, &ExJSON.Generator.generate(&1)),",")
   end
 
   defp has_tuple?(list) when is_list(list) do

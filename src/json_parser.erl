@@ -14,7 +14,7 @@ build_atom(A) when A == true; A == false ; A == nil -> A;
 build_atom(null) -> nil;
 build_atom(A) -> atom_to_binary(A, utf8).
 
--file("/usr/lib/erlang/lib/parsetools-2.0.9/include/yeccpre.hrl", 0).
+-file("/usr/lib/erlang/lib/parsetools-2.0.10/include/yeccpre.hrl", 0).
 %%
 %% %CopyrightBegin%
 %%
@@ -529,7 +529,7 @@ yeccpars2_15_(__Stack0) ->
 yeccpars2_16_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
-   unicode:characters_to_binary ( extract_value ( __1 ) )
+   unicode : characters_to_binary ( extract_value ( __1 ) )
   end | __Stack].
 
 -compile({inline,yeccpars2_17_/1}).

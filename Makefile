@@ -2,27 +2,14 @@ EBIN_DIR=ebin
 
 .PHONY: test clean
 
-compile: erlang elixir
-
-elixir: lib/*.ex
-	@ echo Compiling Elixir code ...
-	@ mkdir -p ${EBIN_DIR}
-	@ touch ${EBIN_DIR}
-	elixirc -pa ${EBIN_DIR} lib/*/*/*.ex lib/*/*.ex lib/*.ex -o ${EBIN_DIR}
+compile:
+	@ mix compile
 	@ echo
 
-erlang: src/*.erl
-	@ echo Compiling Erlang code ...
-	@ mkdir -p ${EBIN_DIR}
-	@ touch ${EBIN_DIR}
-	erlc -o ${EBIN_DIR} src/*.erl
-	@ echo
-
-test: compile
-	@ echo Running tests ...
-	time elixir -pa ${EBIN_DIR} -r "test/**/*_test.exs"
+test:
+	@ mix test
 	@ echo
 
 clean:
-	rm -rf ${EBIN_DIR}
+	@ mix clean
 	@ echo

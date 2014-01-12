@@ -6,16 +6,16 @@ JSON for Elixir
 ## Generating JSON from Elixir
 
 ```elixir
- JSON.generate([ key: "some value" ])
+ ExJSON.generate([ key: "some value" ])
  #=> "{\"key\":\"some value\"}"
 
- JSON.generate([ k: [ 1, 2, 3 ] ])
+ ExJSON.generate([ k: [ 1, 2, 3 ] ])
  #=> "{\"k\":[1,2,3]}"
 
- JSON.generate([ k1: [ k2: [ k3: "v3" ] ] ])
+ ExJSON.generate([ k1: [ k2: [ k3: "v3" ] ] ])
  #=> "{\"k1\":{\"k2\":{\"k3\":\"v3\"}}}"
 
- JSON.generate([
+ ExJSON.generate([
     image: [
       width: 800,
       height: 600,
@@ -34,7 +34,7 @@ JSON for Elixir
 ## Parsing JSON to Elixir
 
 ```elixir
- JSON.parse(
+ ExJSON.parse(
  '{
    "key": "value",
    "another_key": {
@@ -45,7 +45,7 @@ JSON for Elixir
  }')
  #=> [ { "key", "value" }, { "another_key", [ { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" } ] } ]
 
- JSON.parse(
+ ExJSON.parse(
  '{
     "key": "some value",
     "another_key": [ "value1", "another value", "value 3" ],
