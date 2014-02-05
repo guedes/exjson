@@ -28,7 +28,7 @@ end
 
 defimpl ExJSON.Generator, for: List do
   def generate([]), do: "{}"
-  def generate([{}]), do: "{}"
+  def generate([{}]), do: "[]"
 
   def generate(list) do
     if has_tuple?(list) do

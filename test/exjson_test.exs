@@ -4,7 +4,7 @@ defmodule ExJSON.TupleTest do
   test :empty_json do
     assert "{}" ==  ExJSON.generate([])
     assert "{}" ==  ExJSON.generate({})
-    assert "{}" ==  ExJSON.generate([{}])
+    assert "[]" ==  ExJSON.generate([{}])
   end
 
   test :atom_to_quoted do
