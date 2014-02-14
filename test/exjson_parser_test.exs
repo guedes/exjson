@@ -86,6 +86,20 @@ defmodule ExJSON.Parser.ParseTest do
                             ]')
   end
 
+  test :signed_numbers do
+    assert [ { "value", 0 } ] == ExJSON.parse('{ "value": -0 }')
+    assert [ { "value", 0 } ] == ExJSON.parse('{ "value": +0 }')
+
+    assert [ { "value", -123 } ] == ExJSON.parse('{ "value": -123 }')
+    assert [ { "value", 123 } ] == ExJSON.parse('{ "value": +123 }')
+
+    assert [ { "value", -3.5 } ] == ExJSON.parse('{ "value": -3.5 }')
+    assert [ { "value", 3.5 } ] == ExJSON.parse('{ "value": +3.5 }')
+
+    assert [ { "value", 9876543.57654321 } ] == ExJSON.parse('{ "value": +9876543.57654321 }')
+    assert [ { "value", -9876543.57654321 } ] == ExJSON.parse('{ "value": -9876543.57654321 }')
+  end
+
   test :array_object do
     assert [
             [

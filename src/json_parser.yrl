@@ -14,7 +14,7 @@ Nonterminals
 Terminals
     '{' '}'
     '[' ']'
-    ':' ','
+    ':' ',' '-' '+'
     string
     integer
     float
@@ -67,6 +67,21 @@ value ->
 value ->
 	    float :
 	    extract_value('$1').
+
+value ->
+	    '-' integer :
+	    -1 * extract_value('$2').
+value ->
+	    '-' float :
+	    -1 * extract_value('$2').
+
+value ->
+	    '+' integer :
+	    extract_value('$2').
+value ->
+	    '+' float :
+	    extract_value('$2').
+
 value ->
 	    object :
 	    build_object('$1').
