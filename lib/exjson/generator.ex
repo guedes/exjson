@@ -3,6 +3,8 @@ defprotocol ExJSON.Generator do
 end
 
 defimpl ExJSON.Generator, for: Atom do
+  def generate(nil), do: "null"
+
   def generate(atom), do: inspect(atom_to_binary(atom))
 end
 
