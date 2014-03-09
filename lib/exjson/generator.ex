@@ -5,6 +5,9 @@ end
 defimpl ExJSON.Generator, for: Atom do
   def generate(nil), do: "null"
 
+  def generate(true), do: "true"
+  def generate(false), do: "false"
+
   def generate(atom), do: inspect(atom_to_binary(atom))
 end
 

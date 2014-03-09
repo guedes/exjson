@@ -11,6 +11,14 @@ defmodule ExJSON.TupleTest do
     assert "null" ==  ExJSON.generate(nil)
   end
 
+  test :true do
+    assert "true" ==  ExJSON.generate(true)
+  end
+
+  test :false do
+    assert "false" ==  ExJSON.generate(false)
+  end
+
   test :atom_to_quoted do
     assert "\"name\"" ==  ExJSON.generate(:name)
     assert "\"Name\"" ==  ExJSON.generate(:Name)
