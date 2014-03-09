@@ -3,6 +3,11 @@ defprotocol ExJSON.Generator do
 end
 
 defimpl ExJSON.Generator, for: Atom do
+  def generate(nil), do: "null"
+
+  def generate(true), do: "true"
+  def generate(false), do: "false"
+
   def generate(atom), do: inspect(atom_to_binary(atom))
 end
 
@@ -28,7 +33,7 @@ end
 
 defimpl ExJSON.Generator, for: List do
   def generate([]), do: "{}"
-  def generate([{}]), do: "{}"
+  def generate([{}]), do: "[]"
 
   def generate(list) do
     if has_tuple?(list) do
