@@ -4,6 +4,9 @@ defmodule ExJSON.Mixfile do
   def project do
     [ app: :exjson,
       version: "0.2.0",
+      elixir: "0.13.0",
+      description: description,
+      package: package,
       deps: deps ]
   end
 
@@ -17,4 +20,20 @@ defmodule ExJSON.Mixfile do
   defp deps do
     []
   end
+
+  defp description do
+    """
+    A simple Elixir implementation of JSON with an Erlang parser.
+    """
+  end
+
+  defp package do
+    [ 
+      files: ["lib", "mix.exs", "src", "README*", "readme*"],
+      contributors: ["Dickson S. Guedes"],
+      licenses: ["Apache 2.0"],
+      links: [ { "Github", "https://github.com/guedes/exjson" } ]
+    ]
+  end
+
 end
