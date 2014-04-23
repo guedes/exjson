@@ -8,18 +8,20 @@ defmodule ExJSON do
 
   ## Examples
 
-      iex> json = ExJSON.generate([ {"hello", "world"}, { "its", ["is", "very", "nice" ]}])
+      iex> ExJSON.generate([ {"hello", "world"}, { "its", ["is", "very", "nice" ]}])
       #=> "{\"hello\":\"world\",\"its\":[\"is\",\"very\",\"nice\"]}"
   """
   def generate(thing), do: ExJSON.Generator.generate(thing)
-  
+
   @doc """
-  Creates a Elixir data structure from a JSON document.
+  Creates a Elixir Keyword from a JSON document.
 
   ## Examples
 
       iex> json = ExJSON.parse("{\"hello\":\"world\",\"its\":[\"is\",\"very\",\"nice\"]}")
       #=> [{"hello","world"},{"its",["is","very","nice"]}]
+      iex> json["its"] |> Enum.join " "
+      #=> "is very nice"
   """
   def parse(thing), do: ExJSON.Parser.parse(thing)
 
@@ -28,10 +30,12 @@ defmodule ExJSON do
 
   ## Examples
 
-      iex> json = ExJSON.to_map("{\"hello\":\"world\",\"its\":[\"is\",\"very\",\"nice\"]}")
-      #=> %{{"hello" => "world"}, {"its" => [ "is", "very", "nice" ] } }
+      iex> json = ExJSON.parse_to_map("{\"hello\":\"world\",\"its\":[\"is\",\"very\",\"nice\"]}")
+      #=> json = %{"hello" => "world", "its" => [ "is", "very", "nice" ]}
+      iex> json["its"] |> Enum.join " "
+      #=> "is very nice"
   """
-  def to_map(thing), do: ExJSON.Map.to_map(thing)
+  def parse_to_map(thing), do: ExJSON.Map.parse(thing)
 
 end
 

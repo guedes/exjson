@@ -1,17 +1,17 @@
 defmodule ExJSON.Parser do
 
   def parse(thing) when is_binary(thing) do
-      parse(String.to_char_list!(thing))
+    parse(String.to_char_list!(thing))
   end
 
   def parse(thing) when is_list(thing) do
-      tokens = ExJSON.Scanner.scan(thing)
-      parse(tokens)
+    tokens = ExJSON.Scanner.scan(thing)
+    parse(tokens)
   end
 
   def parse({:ok, list, _}) do
-      result = :json_parser.parse(list)
-      elem(result, 1)
+    result = :json_parser.parse(list)
+    elem(result, 1)
   end
 
 end

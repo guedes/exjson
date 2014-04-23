@@ -2,15 +2,15 @@ defmodule ExJSON.Parser.ParseTest do
   use ExUnit.Case
 
   test :simple_tuple do
-    assert [ { "key", "some value" } ] == ExJSON.parse("{\"key\":\"some value\"}")
+    assert [ { "key", "some value" } ] == ExJSON.Parser.parse("{\"key\":\"some value\"}")
   end
 
   test :string_array_test do
-    assert [ { "another_key", [ "value1", "another value", "value 3" ] } ] == ExJSON.parse('{ "another_key": [ "value1", "another value", "value 3" ] }')
+    assert [ { "another_key", [ "value1", "another value", "value 3" ] } ] == ExJSON.Parser.parse('{ "another_key": [ "value1", "another value", "value 3" ] }')
   end
 
   test :integer_array_test do
-    assert [ { "another_key", [ 1, 2, 3 ] } ] == ExJSON.parse('{ "another_key": [ 1, 2, 3 ] }')
+    assert [ { "another_key", [ 1, 2, 3 ] } ] == ExJSON.Parser.parse('{ "another_key": [ 1, 2, 3 ] }')
   end
 
   test :three_keys do
@@ -18,7 +18,7 @@ defmodule ExJSON.Parser.ParseTest do
             { "k1", "v1" },
             { "k2", "v2" },
             { "k3", "v3" }
-           ] == ExJSON.parse(
+           ] == ExJSON.Parser.parse(
            '{
               "k1": "v1",
               "k2": "v2",
@@ -35,7 +35,7 @@ defmodule ExJSON.Parser.ParseTest do
                 { "k3", "v3" }
               ]
             }
-           ] == ExJSON.parse(
+           ] == ExJSON.Parser.parse(
            '{
               "key": "value",
               "another_key": {
@@ -59,7 +59,7 @@ defmodule ExJSON.Parser.ParseTest do
             },
             { "tags", [ "test1", "test2", "test3" ] },
             { "encoded", "знач" }
-           ] == ExJSON.parse(
+           ] == ExJSON.Parser.parse(
            '{
               "key": "some value",
               "another_key": [ "value1", "another value", "value 3" ],
@@ -79,7 +79,7 @@ defmodule ExJSON.Parser.ParseTest do
             [ {"a","b"}, {"c","d"} ],
             [ {"a1","b1"}, {"c1","d1"} ],
             [ {"a2","b2"}, {"c2","d2"} ]
-           ] == ExJSON.parse('[
+           ] == ExJSON.Parser.parse('[
                              { "a": "b", "c": "d" },
                              { "a1": "b1", "c1": "d1" },
                              { "a2": "b2", "c2": "d2" }
@@ -87,17 +87,21 @@ defmodule ExJSON.Parser.ParseTest do
   end
 
   test :signed_numbers do
-    assert [ { "value", 0 } ] == ExJSON.parse('{ "value": -0 }')
-    assert [ { "value", 0 } ] == ExJSON.parse('{ "value": +0 }')
+    assert [ { "value", 0 } ] == ExJSON.Parser.parse('{ "value": -0 }')
+    assert [ { "value", 0 } ] == ExJSON.Parser.parse('{ "value": +0 }')
 
-    assert [ { "value", -123 } ] == ExJSON.parse('{ "value": -123 }')
-    assert [ { "value", 123 } ] == ExJSON.parse('{ "value": +123 }')
+    assert [ { "value", -123 } ] == ExJSON.Parser.parse('{ "value": -123 }')
+    assert [ { "value", 123 } ] == ExJSON.Parser.parse('{ "value": +123 }')
 
-    assert [ { "value", -3.5 } ] == ExJSON.parse('{ "value": -3.5 }')
-    assert [ { "value", 3.5 } ] == ExJSON.parse('{ "value": +3.5 }')
+    assert [ { "value", -3.5 } ] == ExJSON.Parser.parse('{ "value": -3.5 }')
+    assert [ { "value", 3.5 } ] == ExJSON.Parser.parse('{ "value": +3.5 }')
 
-    assert [ { "value", 9876543.57654321 } ] == ExJSON.parse('{ "value": +9876543.57654321 }')
-    assert [ { "value", -9876543.57654321 } ] == ExJSON.parse('{ "value": -9876543.57654321 }')
+    assert [ { "value", 9876543.57654321 } ] == ExJSON.Parser.parse('{ "value": +9876543.57654321 }')
+    assert [ { "value", -9876543.57654321 } ] == ExJSON.Parser.parse('{ "value": -9876543.57654321 }')
+  end
+
+  test :brackets_inside_string do
+    assert ExJSON.Parser.parse('{"output_wrap_begin":"[[","output_wrap_end":"]]"}') == [ {"output_wrap_begin" , "[[" }, { "output_wrap_end", "]]" } ]
   end
 
   test :array_object do
@@ -139,7 +143,7 @@ defmodule ExJSON.Parser.ParseTest do
               { "tags", [ "test12", "test22", "test32" ] }
             ]
 
-           ] == ExJSON.parse(
+           ] == ExJSON.Parser.parse(
            ~s([{
               "key": "some value",
               "another_key": [ "value1", "another value", "value 3" ],

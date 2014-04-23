@@ -26,6 +26,12 @@ defimpl ExJSON.Generator, for: Tuple do
   end
 end
 
+defimpl ExJSON.Generator, for: Map do
+  def generate(map) do
+      map |> Dict.to_list |> ExJSON.Generator.generate
+  end
+end
+
 defimpl ExJSON.Generator, for: List do
   def generate([]), do: "{}"
   def generate([{}]), do: "{}"

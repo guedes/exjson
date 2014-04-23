@@ -1,65 +1,71 @@
 defmodule ExJSON.TupleTest do
   use ExUnit.Case
 
+  @empties [ [], {}, [{}], %{} ]
+  @singles [
+    [ :name     , "\"name\""  ],
+    [ :Name     , "\"Name\""  ],
+    [ :"IDs"    , "\"IDs\""   ],
+    [ "name"    , "\"name\""  ],
+    [ "Name"    , "\"Name\""  ],
+    [ "IDs"     , "\"IDs\""   ],
+    [ 1         , "1"         ],
+    [ 1.0       , "1.0"       ],
+    [ 1231.0123 , "1231.0123" ],
+  ]
+
   test :empty_json do
-    assert "{}" ==  ExJSON.generate([])
-    assert "{}" ==  ExJSON.generate({})
-    assert "{}" ==  ExJSON.generate([{}])
+    @empties |> Enum.each fn value ->
+      assert ExJSON.generate(value) == "{}"
+    end
   end
 
-  test :atom_to_quoted do
-    assert "\"name\"" ==  ExJSON.generate(:name)
-    assert "\"Name\"" ==  ExJSON.generate(:Name)
-    assert "\"IDs\"" ==  ExJSON.generate(:"IDs")
+  test :singles do
+    @singles |> Enum.each fn [ value, expected ] ->
+      assert ExJSON.generate(value) == expected
+    end
   end
 
-  test :string_to_quoted do
-    assert "\"name\"" ==  ExJSON.generate("name")
-    assert "\"Name\"" ==  ExJSON.generate("Name")
-    assert "\"IDs\"" ==  ExJSON.generate("IDs")
+  test :keyword_to_json do
+    assert ExJSON.generate([ name: "A Cool Name" ]) == "{\"name\":\"A Cool Name\"}"
   end
 
-  test :number_to_quoted do
-    assert "1" ==  ExJSON.generate(1)
-    assert "1.0" ==  ExJSON.generate(1.0)
-    assert "1231.0123" ==  ExJSON.generate(1231.0123)
+  test :map_to_json do
+    assert ExJSON.generate(%{ :name => "A Cool Name" }) == "{\"name\":\"A Cool Name\"}"
+    assert ExJSON.generate(%{ "name" => "A Cool Name" }) == "{\"name\":\"A Cool Name\"}"
   end
 
-  test :float_array_test do
-    assert [ { "another_key", [ 1.0, 0.2, 3.3 ] } ] == ExJSON.parse('{ "another_key": [ 1.0, 0.2, 3.3 ] }')
-  end
+  test :nested_to_json do
+    value = "{\"image\":{\"title\":\"Some View\",\"width\":800}}"
 
-  test :brackets_inside_string do
-    assert [ {"output_wrap_begin" , "[[" }, { "output_wrap_end", "]]" } ] == ExJSON.parse('{"output_wrap_begin":"[[","output_wrap_end":"]]"}')
-  end
-
-  test :tuple_to_pair do
-    assert "\"name\":\"A Cool Name\"", ExJSON.generate({ :name , "A Cool Name" })
-  end
-
-  test :kv_to_json do
-    assert "{\"name\":\"A Cool Name\"}" ==  ExJSON.generate([ name: "A Cool Name" ])
-  end
-
-  test :nested_kv_to_json do
-    assert "{\"image\":{\"title\":\"Some View\",\"width\":800}}" == ExJSON.generate([ image: [ title: "Some View", width: 800 ] ])
+    assert ExJSON.generate([ image: [ title: "Some View", width: 800 ] ]) == value
+    assert ExJSON.generate(%{ :image => %{ :title => "Some View", :width => 800 } }) == value
   end
 
   test :key_with_number_array_as_value_to_json do
-    assert "{\"path\":\"/some/path\",\"tags\":[1,2,3]}" == ExJSON.generate([ path: "/some/path", tags: [ 1, 2, 3 ] ])
+    value = "{\"path\":\"/some/path\",\"tags\":[1,2,3]}"
+
+    assert ExJSON.generate([ path: "/some/path", tags: [ 1, 2, 3 ] ]) == value
+    assert ExJSON.generate(%{ :path => "/some/path", :tags => [ 1, 2, 3 ] }) == value
   end
 
   test :json_string_with_unicode do
-    assert "{\"email\":\"cc@example.com\",\"password\":\"abc\",\"_utf8\":\"☃\"}" == ExJSON.generate([ email: "cc@example.com", password: "abc", _utf8: "☃" ])
-    assert [ { "email", "cc@example.com" }, { "password", "abc"}, { "_utf8", "☃" } ] == ExJSON.parse("{\"email\":\"cc@example.com\", \"password\": \"abc\",\"_utf8\":\"☃\"}") 
+    value = "{\"_utf8\":\"☃\",\"email\":\"cc@example.com\",\"password\":\"abc\"}"
+
+    assert ExJSON.generate([ _utf8: "☃", email: "cc@example.com", password: "abc"]) == value
+    assert ExJSON.generate(%{ email: "cc@example.com", password: "abc", _utf8: "☃" }) == value
+
+    assert ExJSON.parse(value) == [ { "_utf8", "☃" }, { "email", "cc@example.com" }, { "password", "abc"} ]
+    assert ExJSON.parse_to_map(value) == %{ "_utf8" => "☃" , "email" => "cc@example.com", "password" => "abc" }
   end
 
   test :rfc4267_json_object do
     # See http://www.ietf.org/rfc/rfc4627.txt
-    assert "{\"image\":{\"height\":600,\"ids\":[116,943,234,38793],\"thumbnail\":{\"height\":125,\"url\":\"http://www.example.com/image/481989943\",\"width\":100},\"title\":\"View from 15th Floor\",\"width\":800}}"  == ExJSON.generate(
-      [ image: [
+    expected = "{\"image\":{\"height\":600,\"ids\":[116,943,234,38793,1.0,-1.9],\"thumbnail\":{\"height\":125,\"url\":\"http://www.example.com/image/481989943\",\"width\":100},\"title\":\"View from 15th Floor\",\"width\":800}}"
+    assert ExJSON.generate([
+      image: [
           height: 600,
-          ids: [ 116, 943, 234, 38793 ],
+          ids: [ 116, 943, 234, 38793, 1.0, -1.9 ],
           thumbnail: [
             height: 125,
             url: "http://www.example.com/image/481989943",
@@ -68,6 +74,20 @@ defmodule ExJSON.TupleTest do
           title: "View from 15th Floor",
           width: 800
         ]
-      ])
+    ]) == expected
+
+    assert ExJSON.generate(%{
+      image: %{
+          height: 600,
+          ids: [ 116, 943, 234, 38793, 1.0, -1.9 ],
+          thumbnail: %{
+            height: 125,
+            url: "http://www.example.com/image/481989943",
+            width: 100
+          },
+          title: "View from 15th Floor",
+          width: 800
+        }
+    }) == expected
   end
 end
