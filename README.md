@@ -85,10 +85,10 @@ JSON for Elixir
   "location": {
     "lat": -47.8,
     "lng": 23.8
-  }, 
+  },
   "name": "The name",
   "phone": "666-6666",
-  "urls": [ 
+  "urls": [
     "http://example1.org",
     "http://example2.org"
   ]
