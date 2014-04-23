@@ -1,4 +1,4 @@
-ebin
+_build/
 exbin
 erl_crash.dump
 *.sw?
