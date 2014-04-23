@@ -4,17 +4,21 @@ defmodule ExJSON do
   """
 
   @doc """
-  Creates a JSON document from a Elixir data structure.
+  Creates a JSON document from an Elixir keyword list or map.
 
   ## Examples
 
       iex> ExJSON.generate([ {"hello", "world"}, { "its", ["is", "very", "nice" ]}])
       #=> "{\"hello\":\"world\",\"its\":[\"is\",\"very\",\"nice\"]}"
+      iex> ExJSON.generate(%{ "hello" => "world", "its" => ["is", "very", "nice" ] })
+      #=> "{\"hello\":\"world\",\"its\":[\"is\",\"very\",\"nice\"]}"
   """
   def generate(thing), do: ExJSON.Generator.generate(thing)
 
   @doc """
-  Creates a Elixir Keyword from a JSON document.
+  Creates an Elixir structure from a JSON document. By default ExJSON
+  returns a Keyword list unless you specify `:to_map`, then a Map is
+  returned.
 
   ## Examples
 
@@ -22,20 +26,14 @@ defmodule ExJSON do
       #=> [{"hello","world"},{"its",["is","very","nice"]}]
       iex> json["its"] |> Enum.join " "
       #=> "is very nice"
-  """
-  def parse(thing), do: ExJSON.Parser.parse(thing)
 
-  @doc """
-  Creates a Elixir Map from a JSON document.
-
-  ## Examples
-
-      iex> json = ExJSON.parse_to_map("{\"hello\":\"world\",\"its\":[\"is\",\"very\",\"nice\"]}")
-      #=> json = %{"hello" => "world", "its" => [ "is", "very", "nice" ]}
-      iex> json["its"] |> Enum.join " "
+      iex> json_map = ExJSON.parse("{\"hello\":\"world\",\"its\":[\"is\",\"very\",\"nice\"]}", :to_map)
+      #=> %{ "hello" => "world", "its" => ["is","very","nice"] }
+      iex> json_map["its"] |> Enum.join " "
       #=> "is very nice"
+
   """
-  def parse_to_map(thing), do: ExJSON.Map.parse(thing)
+  def parse(thing, return_type \\ :to_keyword), do: ExJSON.Parser.parse(thing, return_type)
 
 end
 

@@ -1,10 +1,10 @@
--module(json_parser).
+-module(exjson_to_map).
 -export([parse/1, parse_and_scan/1, format_error/1]).
--file("src/json_parser.yrl", 95).
+-file("src/exjson_to_map.yrl", 95).
 extract_value({_,_,Value}) -> Value.
 
 build_object([L]) when is_list(L) -> L;
-build_object(T) when is_tuple(T)  -> [ T ];
+build_object(T) when is_tuple(T)  -> maps:from_list([ T ]);
 build_object(Any) -> Any.
 
 build_pair(K, V) -> { unicode:characters_to_binary(extract_value(K)), V }.
@@ -14,7 +14,7 @@ build_atom(A) when A == true; A == false ; A == nil -> A;
 build_atom(null) -> nil;
 build_atom(A) -> atom_to_binary(A, utf8).
 
--file("/usr/lib/erlang/lib/parsetools-2.0.10/include/yeccpre.hrl", 0).
+-file("/usr/lib/erlang/lib/parsetools-2.0.11/include/yeccpre.hrl", 0).
 %%
 %% %CopyrightBegin%
 %%
@@ -198,7 +198,7 @@ yecctoken2string(Other) ->
 
 
 
--file("src/json_parser.erl", 201).
+-file("src/exjson_to_map.erl", 201).
 
 yeccpars2(0=S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_0(S, Cat, Ss, Stack, T, Ts, Tzr);
@@ -313,7 +313,8 @@ yeccpars2_4(_, _, _, _, T, _, _) ->
 yeccpars2_5(S, ',', Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 24, Ss, Stack, T, Ts, Tzr);
 yeccpars2_5(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
- yeccgoto_members(hd(Ss), Cat, Ss, Stack, T, Ts, Tzr).
+ NewStack = yeccpars2_5_(Stack),
+ yeccgoto_members(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 yeccpars2_6(S, '}', Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 23, Ss, Stack, T, Ts, Tzr);
@@ -514,36 +515,44 @@ yeccgoto_value(30, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_26(26, Cat, Ss, Stack, T, Ts, Tzr).
 
 -compile({inline,yeccpars2_0_/1}).
--file("src/json_parser.yrl", 25).
+-file("src/exjson_to_map.yrl", 25).
 yeccpars2_0_(__Stack0) ->
  [begin
-   [ ]
+   # { }
   end | __Stack0].
 
 -compile({inline,yeccpars2_3_/1}).
--file("src/json_parser.yrl", 25).
+-file("src/exjson_to_map.yrl", 25).
 yeccpars2_3_(__Stack0) ->
  [begin
-   [ ]
+   # { }
   end | __Stack0].
 
+-compile({inline,yeccpars2_5_/1}).
+-file("src/exjson_to_map.yrl", 37).
+yeccpars2_5_(__Stack0) ->
+ [__1 | __Stack] = __Stack0,
+ [begin
+   maps : from_list ( [ __1 ] )
+  end | __Stack].
+
 -compile({inline,yeccpars2_8_/1}).
--file("src/json_parser.yrl", 28).
+-file("src/exjson_to_map.yrl", 28).
 yeccpars2_8_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
-   [ ]
+   # { }
   end | __Stack].
 
 -compile({inline,yeccpars2_9_/1}).
--file("src/json_parser.yrl", 25).
+-file("src/exjson_to_map.yrl", 25).
 yeccpars2_9_(__Stack0) ->
  [begin
-   [ ]
+   # { }
   end | __Stack0].
 
 -compile({inline,yeccpars2_10_/1}).
--file("src/json_parser.yrl", 43).
+-file("src/exjson_to_map.yrl", 43).
 yeccpars2_10_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -551,7 +560,7 @@ yeccpars2_10_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_11_/1}).
--file("src/json_parser.yrl", 83).
+-file("src/exjson_to_map.yrl", 83).
 yeccpars2_11_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -559,7 +568,7 @@ yeccpars2_11_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_15_/1}).
--file("src/json_parser.yrl", 89).
+-file("src/exjson_to_map.yrl", 89).
 yeccpars2_15_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -567,7 +576,7 @@ yeccpars2_15_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_16_/1}).
--file("src/json_parser.yrl", 65).
+-file("src/exjson_to_map.yrl", 65).
 yeccpars2_16_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -575,7 +584,7 @@ yeccpars2_16_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_17_/1}).
--file("src/json_parser.yrl", 62).
+-file("src/exjson_to_map.yrl", 62).
 yeccpars2_17_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -583,7 +592,7 @@ yeccpars2_17_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_18_/1}).
--file("src/json_parser.yrl", 59).
+-file("src/exjson_to_map.yrl", 59).
 yeccpars2_18_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -591,7 +600,7 @@ yeccpars2_18_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_19_/1}).
--file("src/json_parser.yrl", 72).
+-file("src/exjson_to_map.yrl", 72).
 yeccpars2_19_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -599,7 +608,7 @@ yeccpars2_19_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_20_/1}).
--file("src/json_parser.yrl", 69).
+-file("src/exjson_to_map.yrl", 69).
 yeccpars2_20_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -607,7 +616,7 @@ yeccpars2_20_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_21_/1}).
--file("src/json_parser.yrl", 79).
+-file("src/exjson_to_map.yrl", 79).
 yeccpars2_21_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -615,7 +624,7 @@ yeccpars2_21_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_22_/1}).
--file("src/json_parser.yrl", 76).
+-file("src/exjson_to_map.yrl", 76).
 yeccpars2_22_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -623,7 +632,7 @@ yeccpars2_22_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_23_/1}).
--file("src/json_parser.yrl", 31).
+-file("src/exjson_to_map.yrl", 31).
 yeccpars2_23_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -631,15 +640,15 @@ yeccpars2_23_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_25_/1}).
--file("src/json_parser.yrl", 40).
+-file("src/exjson_to_map.yrl", 40).
 yeccpars2_25_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
-   [ __1 ] ++ lists : flatten ( [ __3 ] )
+   maps : merge ( maps : from_list ( [ __1 ] ) , __3 )
   end | __Stack].
 
 -compile({inline,yeccpars2_26_/1}).
--file("src/json_parser.yrl", 53).
+-file("src/exjson_to_map.yrl", 53).
 yeccpars2_26_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -647,7 +656,7 @@ yeccpars2_26_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_28_/1}).
--file("src/json_parser.yrl", 47).
+-file("src/exjson_to_map.yrl", 47).
 yeccpars2_28_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -655,7 +664,7 @@ yeccpars2_28_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_29_/1}).
--file("src/json_parser.yrl", 50).
+-file("src/exjson_to_map.yrl", 50).
 yeccpars2_29_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -663,14 +672,14 @@ yeccpars2_29_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_30_/1}).
--file("src/json_parser.yrl", 25).
+-file("src/exjson_to_map.yrl", 25).
 yeccpars2_30_(__Stack0) ->
  [begin
-   [ ]
+   # { }
   end | __Stack0].
 
 -compile({inline,yeccpars2_31_/1}).
--file("src/json_parser.yrl", 56).
+-file("src/exjson_to_map.yrl", 56).
 yeccpars2_31_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -678,4 +687,4 @@ yeccpars2_31_(__Stack0) ->
   end | __Stack].
 
 
--file("src/json_parser.yrl", 108).
+-file("src/exjson_to_map.yrl", 108).
