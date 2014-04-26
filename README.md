@@ -80,7 +80,7 @@ JSON for Elixir
 ## Parsing JSON string to map
 
 ```elixir
- ExJSON.parse_to_map('{
+ ExJSON.parse('{
   "location": {
     "lat": -47.8,
     "lng": 23.8
@@ -91,7 +91,7 @@ JSON for Elixir
     "http://example1.org",
     "http://example2.org"
   ]
- }')
+ }', :to_map)
  #=> %{"location" => %{"lat" => -47.8, "lng" => 23.8}, "name" => "The name", "phone" => "666-6666", "urls" => ["http://example1.org", "http://example2.org"]}
 ```
 
