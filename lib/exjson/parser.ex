@@ -1,7 +1,7 @@
 defmodule ExJSON.Parser do
 
   def parse(thing, return_type) when is_binary(thing) do
-    parse(String.to_char_list!(thing), return_type)
+    parse(List.from_char_data!(thing), return_type)
   end
 
   def parse(thing, return_type) when is_list(thing) do
