@@ -1,6 +1,6 @@
 defmodule ExJSON.Scanner do
   def scan(thing) when is_binary(thing) do
-    String.to_char_list!(thing)
+    List.from_char_data!(thing)
   end
 
   def scan(string) do
