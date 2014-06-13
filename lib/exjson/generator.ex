@@ -28,13 +28,17 @@ end
 
 defimpl ExJSON.Generator, for: Map do
   def generate(map) do
+    if Map.size(map) == 0 do
+      "{}"
+    else
       map |> Dict.to_list |> ExJSON.Generator.generate
+    end
   end
 end
 
 defimpl ExJSON.Generator, for: List do
-  def generate([]), do: "{}"
-  def generate([{}]), do: "{}"
+  def generate([]), do: "[]"
+  def generate([{}]), do: "[{}]"
 
   def generate(list) do
     if has_tuple?(list) do
