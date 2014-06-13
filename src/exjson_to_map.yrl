@@ -3,6 +3,7 @@
 % Copyright (C) 2012-2014 Dickson S. Guedes
 
 Nonterminals
+    root
     object
     members
     pair
@@ -21,21 +22,24 @@ Terminals
     atom
     .
 
-Rootsymbol object.
+Rootsymbol root.
 
 Nonassoc 10 object.
 
-object ->   '$empty' :
-	    #{}.
+root ->   '$empty' :
+	#{}.
+root ->
+  object: '$1'.
+root ->
+  array: '$1'.
+
 object ->
 	    '{' '}' :
 	    #{ }.
 object ->
 	    '{' members '}' :
 	    build_object('$2').
-object ->
-        array :
-        '$1'.
+
 members ->
 	    pair :
 	    maps:from_list(['$1']).
@@ -87,7 +91,7 @@ value ->
 	    build_object('$1').
 value ->
 	    array :
-	    lists:flatten('$1').
+	    '$1'.
 value ->
 	    atom :
 	    build_atom('$1').
