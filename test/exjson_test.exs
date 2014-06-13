@@ -1,7 +1,7 @@
 defmodule ExJSON.Test do
   use ExUnit.Case
 
-  @empties [ [], {}, [{}], %{} ]
+  @empties [ {}, %{} ]
 
   @singles [
     [ :name     , "\"name\""  ],
@@ -32,9 +32,23 @@ defmodule ExJSON.Test do
     end
   end
 
+  test "empty list outputs []" do
+    assert ExJSON.generate([]) == "[]"
+  end
+
+  test "elixir [%{}] or [{}] becomes [{}]" do
+    assert ExJSON.generate([{}]) == "[{}]"
+    assert ExJSON.generate([%{}]) == "[{}]"
+  end
+
   test "parse empty json" do
     assert ExJSON.parse("{}") == []
     assert ExJSON.parse("{}", :to_map) == %{}
+    assert ExJSON.parse("[]", :to_map) == []
+    assert ExJSON.parse("[[[[]]]]", :to_map) == [[[[]]]]
+
+    assert [[[map]]] = ExJSON.parse("[[[{}]]]", :to_map)
+    assert is_map(map) and Enum.empty?(map)
   end
 
   test "generate just keys or values" do
