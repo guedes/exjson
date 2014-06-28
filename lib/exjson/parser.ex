@@ -15,6 +15,6 @@ defmodule ExJSON.Parser do
   end
 
   defp normalize_parser(return_type) when is_atom(return_type) do
-    binary_to_atom("exjson_" <> atom_to_binary(return_type))
+    :erlang.binary_to_atom("exjson_" <> :erlang.atom_to_binary(return_type))
   end
 end
