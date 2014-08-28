@@ -4,7 +4,7 @@ defmodule ExJSON.Mixfile do
   def project do
     [ app: :exjson,
       version: "0.3.0",
-      elixir: "~> 0.14.0-dev",
+      elixir: "~> 0.15",
       description: description,
       package: package,
       deps: deps ]
