@@ -27,7 +27,7 @@ defmodule ExJSON.Test do
   ]
 
   test "generate empty json" do
-    @empties |> Enum.each fn value ->
+    Enum.each @empties, fn(value) ->
       assert ExJSON.generate(value) == "{}"
     end
   end
@@ -52,13 +52,13 @@ defmodule ExJSON.Test do
   end
 
   test "generate just keys or values" do
-    @singles |> Enum.each fn [ value, expected ] ->
+    Enum.each @singles, fn([ value, expected ]) ->
       assert ExJSON.generate(value) == expected
     end
   end
 
   test "number with sign" do
-    @numbers |> Enum.each fn [ value, expected ] ->
+    Enum.each @numbers, fn([ value, expected ]) ->
       assert ExJSON.parse("{ \"value\": #{value} }") == [ { "value", expected } ]
       assert ExJSON.parse("{ \"value\": #{value} }", :to_map) == %{ "value" => expected }
     end

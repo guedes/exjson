@@ -14,22 +14,23 @@ build_atom(A) when A == true; A == false ; A == nil -> A;
 build_atom(null) -> nil;
 build_atom(A) -> atom_to_binary(A, utf8).
 
--file("/usr/local/lib/erlang/lib/parsetools-2.0.11/include/yeccpre.hrl", 0).
+-file("/usr/lib/erlang/lib/parsetools-2.1.1/include/yeccpre.hrl", 0).
 %%
 %% %CopyrightBegin%
 %%
-%% Copyright Ericsson AB 1996-2013. All Rights Reserved.
+%% Copyright Ericsson AB 1996-2015. All Rights Reserved.
 %%
-%% The contents of this file are subject to the Erlang Public License,
-%% Version 1.1, (the "License"); you may not use this file except in
-%% compliance with the License. You should have received a copy of the
-%% Erlang Public License along with this software. If not, it can be
-%% retrieved online at http://www.erlang.org/.
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
 %%
-%% Software distributed under the License is distributed on an "AS IS"
-%% basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-%% the License for the specific language governing rights and limitations
-%% under the License.
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
 %%
 %% %CopyrightEnd%
 %%
@@ -141,21 +142,10 @@ yecc_end(Line) ->
     {'$end', Line}.
 
 yecctoken_end_location(Token) ->
-    try
-        {text, Str} = erl_scan:token_info(Token, text),
-        {line, Line} = erl_scan:token_info(Token, line),
-        Parts = re:split(Str, "\n"),
-        Dline = length(Parts) - 1,
-        Yline = Line + Dline,
-        case erl_scan:token_info(Token, column) of
-            {column, Column} ->
-                Col = byte_size(lists:last(Parts)),
-                {Yline, Col + if Dline =:= 0 -> Column; true -> 1 end};
-            undefined ->
-                Yline
-        end
-    catch _:_ ->
-        yecctoken_location(Token)
+    try erl_anno:end_location(element(2, Token)) of
+        undefined -> yecctoken_location(Token);
+        Loc -> Loc
+    catch _:_ -> yecctoken_location(Token)
     end.
 
 -compile({nowarn_unused_function, yeccerror/1}).
@@ -166,15 +156,15 @@ yeccerror(Token) ->
 
 -compile({nowarn_unused_function, yecctoken_to_string/1}).
 yecctoken_to_string(Token) ->
-    case catch erl_scan:token_info(Token, text) of
-        {text, Txt} -> Txt;
-        _ -> yecctoken2string(Token)
+    try erl_scan:text(Token) of
+        undefined -> yecctoken2string(Token);
+        Txt -> Txt
+    catch _:_ -> yecctoken2string(Token)
     end.
 
 yecctoken_location(Token) ->
-    case catch erl_scan:token_info(Token, location) of
-        {location, Loc} -> Loc;
-        _ -> element(2, Token)
+    try erl_scan:location(Token)
+    catch _:_ -> element(2, Token)
     end.
 
 -compile({nowarn_unused_function, yecctoken2string/1}).
@@ -198,8 +188,9 @@ yecctoken2string(Other) ->
 
 
 
--file("src/exjson_to_keyword.erl", 201).
+-file("src/exjson_to_keyword.erl", 191).
 
+-dialyzer({nowarn_function, yeccpars2/7}).
 yeccpars2(0=S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_0(S, Cat, Ss, Stack, T, Ts, Tzr);
 %% yeccpars2(1=S, Cat, Ss, Stack, T, Ts, Tzr) ->
@@ -277,6 +268,7 @@ yeccpars2_0(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_0_(Stack),
  yeccpars2_1(1, Cat, [0 | Ss], NewStack, T, Ts, Tzr).
 
+-dialyzer({nowarn_function, yeccpars2_1/7}).
 yeccpars2_1(_S, '$end', _Ss, Stack, _T, _Ts, _Tzr) ->
  {ok, hd(Stack)};
 yeccpars2_1(_, _, _, _, T, _, _) ->
@@ -293,6 +285,7 @@ yeccpars2_4(S, ']', Ss, Stack, T, Ts, Tzr) ->
 yeccpars2_4(S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_10(S, Cat, Ss, Stack, T, Ts, Tzr).
 
+-dialyzer({nowarn_function, yeccpars2_5/7}).
 yeccpars2_5(S, string, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 8, Ss, Stack, T, Ts, Tzr);
 yeccpars2_5(S, '}', Ss, Stack, T, Ts, Tzr) ->
@@ -305,11 +298,13 @@ yeccpars2_6(S, ',', Ss, Stack, T, Ts, Tzr) ->
 yeccpars2_6(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccgoto_members(hd(Ss), Cat, Ss, Stack, T, Ts, Tzr).
 
+-dialyzer({nowarn_function, yeccpars2_7/7}).
 yeccpars2_7(S, '}', Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 24, Ss, Stack, T, Ts, Tzr);
 yeccpars2_7(_, _, _, _, T, _, _) ->
  yeccerror(T).
 
+-dialyzer({nowarn_function, yeccpars2_8/7}).
 yeccpars2_8(S, ':', Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 10, Ss, Stack, T, Ts, Tzr);
 yeccpars2_8(_, _, _, _, T, _, _) ->
@@ -320,6 +315,7 @@ yeccpars2_9(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_9_(Stack),
  yeccgoto_object(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
 
+-dialyzer({nowarn_function, yeccpars2_10/7}).
 yeccpars2_10(S, '+', Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 14, Ss, Stack, T, Ts, Tzr);
 yeccpars2_10(S, '-', Ss, Stack, T, Ts, Tzr) ->
@@ -352,6 +348,7 @@ yeccpars2_13(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_13_(Stack),
  yeccgoto_value(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
+-dialyzer({nowarn_function, yeccpars2_14/7}).
 yeccpars2_14(S, float, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 22, Ss, Stack, T, Ts, Tzr);
 yeccpars2_14(S, integer, Ss, Stack, T, Ts, Tzr) ->
@@ -359,6 +356,7 @@ yeccpars2_14(S, integer, Ss, Stack, T, Ts, Tzr) ->
 yeccpars2_14(_, _, _, _, T, _, _) ->
  yeccerror(T).
 
+-dialyzer({nowarn_function, yeccpars2_15/7}).
 yeccpars2_15(S, float, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 20, Ss, Stack, T, Ts, Tzr);
 yeccpars2_15(S, integer, Ss, Stack, T, Ts, Tzr) ->
@@ -407,6 +405,7 @@ yeccpars2_24(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_24_(Stack),
  yeccgoto_object(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
 
+-dialyzer({nowarn_function, yeccpars2_25/7}).
 yeccpars2_25(S, string, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 8, Ss, Stack, T, Ts, Tzr);
 yeccpars2_25(_, _, _, _, T, _, _) ->
@@ -423,6 +422,7 @@ yeccpars2_27(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_27_(Stack),
  yeccgoto_elements(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
+-dialyzer({nowarn_function, yeccpars2_28/7}).
 yeccpars2_28(S, ']', Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 30, Ss, Stack, T, Ts, Tzr);
 yeccpars2_28(_, _, _, _, T, _, _) ->
