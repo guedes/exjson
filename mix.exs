@@ -30,7 +30,7 @@ defmodule ExJSON.Mixfile do
   defp package do
     [ 
       files: ["lib", "mix.exs", "src", "README*", "readme*"],
-      contributors: ["Dickson S. Guedes"],
+      maintainers: ["Dickson S. Guedes"],
       licenses: ["Apache 2.0"],
       links: %{ "Github" => "https://github.com/guedes/exjson" }
     ]
