@@ -1,6 +1,6 @@
 % Grammar for the JSON specification with yecc
 
-% Copyright (C) 2012-2014 Dickson S. Guedes
+% Copyright (C) 2012-2016 Dickson S. Guedes
 
 Nonterminals
     root
