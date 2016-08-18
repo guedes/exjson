@@ -3,6 +3,18 @@ JSON for Elixir
 
 [Elixir](http://elixir-lang.org) implementation (with an Erlang parser) of the [JSON](http://www.json.org) specification to [RFC 4627](http://www.ietf.org/rfc/rfc4627.txt). ExJSON generate JSON string from keyword lists and maps and can parse into those structures also.
 
+## Installation
+
+Add HTTPoison to your `mix.exs` dependencies:
+
+```elixir
+def deps do
+  [{:exjson, "~> 0.6.0"}]
+end
+```
+
+and run `$ mix deps.get`.
+
 ## Generating a JSON string from a keyword list
 
 ```elixir
